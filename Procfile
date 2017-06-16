@@ -1,1 +1,1 @@
-web: python3 index.py
+web: sudo python3 index.py
