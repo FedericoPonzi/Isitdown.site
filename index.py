@@ -16,11 +16,12 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 def doPing(host):
-    ipaddress = host # guess who
-    if requests.head(ipaddress).status_code == 200:
+    host = host if host[:7] == "http://" else "http://" + host
+    if requests.head(host).status_code == 200:
         return "up."
     else:
         return "down."
+        
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
