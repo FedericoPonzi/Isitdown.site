@@ -14,7 +14,7 @@
 
         <!--[if lt IE 9]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-            <script>window.html5 || document.write('<script src="js/vendor/html5shiv.js"><\/script>')</script>
+            <script>window.html5 || document.write('<script src="{{ url_for('static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
         <![endif]-->
     </head>
     <body>
@@ -32,6 +32,11 @@
 
         <div class="about">
           <p>With this site you can easily check if a site is down or if you have a connection problem.</p>
+          <p>The most common problems are:
+            <ul>
+              <li>DNS Problem: It may happen that your host blocks that domain. Try to use an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a>.</li>
+            </ul>
+          </p>
         </div>
         <footer>
           This site is open source | Developed with &lt;3 by <a href="http://twitter.com/federico_ponzi">@FedericoPonzi</a>

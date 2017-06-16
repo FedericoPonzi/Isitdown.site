@@ -145,8 +145,12 @@ footer {
   width: 70%;
   align-self: center;
   margin-top:20px;
+  text-align:left;
 }
-
+a {
+  color:white;
+  font-weight: bold;
+}
 @keyframes slideIn {
     0% {
         opacity: 0;

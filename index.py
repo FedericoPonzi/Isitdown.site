@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import os
 import subprocess
 import requests
+from urllib3.exceptions import ReadTimeoutError
 app = Flask(__name__)
 
 @app.route("/")
@@ -17,9 +18,15 @@ def page_not_found(error):
 
 def doPing(host):
     host = host if host[:7] == "http://" else "http://" + host
-    if requests.head(host).status_code == 200:
+    print("request " + host)
+    try:
+        resp = requests.head(host, timeout=2) #Every response is good :)
         return "up."
-    else:
+    except ReadTimeoutError as e:
+        return "down."
+    except Exception as e:
+        # Host not found, and other
+        print(repr(e))
         return "down."
 
 if __name__ == "__main__":
