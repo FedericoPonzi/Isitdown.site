@@ -58,6 +58,7 @@ textarea {
 html, body {
      height: 100%;
      margin: 0;
+     text-align: center;
    }
 
 
@@ -82,9 +83,11 @@ body {
   font-size: 3em;
   letter-spacing: 2px;
 }
+
 .title input{
   text-align: center;
 }
+
 #host {
     padding:5px;
     max-width: 20%;
@@ -120,6 +123,13 @@ body {
 
 .h3{
   font-size: 2em;
+}
+
+.siteUp{
+
+}
+.siteDown{
+
 }
 
 footer {
