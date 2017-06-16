@@ -16,18 +16,11 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 def doPing(host):
-    #....temporary way...
     ipaddress = host # guess who
-    ping(ipaddress);
-    '''
-    proc = subprocess.Popen(
-        ['ping', '-c', '1', ipaddress],
-        stdout=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    if proc.returncode == 0:
+    if requests.head(ipaddress).status_code == 200:
         return "up."
-    return "down."
-    '''
+    else:
+        return "down."
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
