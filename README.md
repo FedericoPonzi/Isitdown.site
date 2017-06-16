@@ -6,9 +6,6 @@
    * Bonus for isitdown.site/api/{site url}
    * The requests should be logged in order to prevent abuse, and should flush old requests.
 
-# todo
- * Add adsense + analytics
-
 # long todo:
  * Support multi-language
  * Add database
@@ -21,5 +18,4 @@ The site should limit the number check to a host. In order to do this, it should
 
 
 # Db:
-
 id datetime ip host

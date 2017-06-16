@@ -87,17 +87,15 @@ body {
 .title input{
   text-align: center;
 }
-
+form{
+  display: inline-block;
+  border:2px solid #52BAAF;
+  border-radius: 5px;
+  background: #52BAAF
+}
 #host {
     padding:5px;
-    max-width: 20%;
     border:2px solid #52BAAF;
-    border-top:4px solid #52BAAF;
-    border-bottom: 4px solid #52BAAF;
-    border-left: 4px  solid #52BAAF;
-    border-top-left-radius: 5px;
-    align-self:center;
-    border-bottom-left-radius: 5px;
     width: 200px;
     height: 30px;
     padding-right: 50px;
@@ -145,7 +143,7 @@ footer {
   width: 70%;
   align-self: center;
   margin-top:20px;
-  text-align:left;
+  text-align:center;
 }
 a {
   color:white;
