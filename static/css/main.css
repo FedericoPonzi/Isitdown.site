@@ -62,36 +62,72 @@ html, body {
 
 
 body {
-  background-color:#27ae60;
+  background: #52BAAF;
   display: flex;
   flex-direction: column;
-  padding-top:2em;
+  color: #fff;
 }
 .container{
+  padding-top: 1em;
   text-align:center;
-  min-width: 70%;
+  min-width: 100%;
   align-self:center;
-  background-color: rgba(255,255,255,0.8);
-  box-shadow: 5px 5px 3px rgba(45, 45, 45, 0.31);
+  background-color: #27ae60 /*rgba(255,255,255,0.8);*/
   flex: 1 0 auto;
-  padding-bottom:2em;
+  padding-bottom:3em;
+  background-color:#293B4D;
 
 }
 .title{
   font-size: 3em;
+  letter-spacing: 2px;
 }
 .title input{
   text-align: center;
-
 }
+#host {
+    padding:5px;
+    max-width: 20%;
+    border:2px solid #52BAAF;
+    border-top:4px solid #52BAAF;
+    border-bottom: 4px solid #52BAAF;
+    border-left: 4px  solid #52BAAF;
+    border-top-left-radius: 5px;
+    align-self:center;
+    border-bottom-left-radius: 5px;
+    width: 200px;
+    height: 30px;
+    padding-right: 50px;
+    color:black;
+    letter-spacing: 1.2px;
+}
+#host:focus{
+    border-color: yellow;
+}
+
+#check {
+  height: 48px;
+  margin-left:-4px;
+  padding:5px 15px;
+  background:#52BAAF;
+  border:0 none;
+  align-self:center;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom: 2px solid #52BAAF;
+  font-size: 1.2em;
+}
+
 .h3{
   font-size: 2em;
 }
+
 footer {
   text-align:center;
   padding-top: 20px;
   padding-bottom: 20px;
   flex: 1 0 auto;
+
 }
 
 .about {
@@ -99,10 +135,19 @@ footer {
   width: 70%;
   align-self: center;
   margin-top:20px;
-  color:white;
 }
 
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(20%)
+    }
 
+    100% {
+        opacity: 1;
+        transform: translateX(0)
+    }
+}
 
 
 /* ==========================================================================
