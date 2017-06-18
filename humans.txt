@@ -2,14 +2,13 @@
 # The humans responsible & technology colophon
 
 # TEAM
-
-    <name> -- <role> -- <twitter>
+    Federico Ponzi -- fullstack -- @federico_ponzi
 
 # THANKS
-
-    <name>
+    Heroku: I'm just paying for the domain <3
 
 # TECHNOLOGY COLOPHON
 
     HTML5, CSS3
-    jQuery, Modernizr
+    Python, Heroku
+    Flask, Modernizr

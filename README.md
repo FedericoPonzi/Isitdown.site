@@ -18,4 +18,5 @@ The site should limit the number check to a host. In order to do this, it should
 
 
 # Db:
+createuser -W isitdownu
 id datetime ip host
