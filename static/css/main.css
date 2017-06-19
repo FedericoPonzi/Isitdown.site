@@ -84,10 +84,7 @@ body {
   letter-spacing: 2px;
 }
 
-.title input{
-  text-align: center;
-}
-form{
+form {
   display: inline-block;
   border:2px solid #52BAAF;
   border-radius: 5px;
@@ -96,10 +93,11 @@ form{
 #lastconnections{
 
 }
-.up{
+.hostUp{
     border-bottom: 3px solid #50ff3b;
 }
-.down{
+
+.hostDown{
     border-bottom: 3px solid #ff5c5c;
 }
 
@@ -131,13 +129,6 @@ form{
 
 .h3{
   font-size: 2em;
-}
-
-.siteUp{
-
-}
-.siteDown{
-
 }
 
 footer {
