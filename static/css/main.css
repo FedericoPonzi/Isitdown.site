@@ -157,6 +157,9 @@ footer {
   margin-top:20px;
   text-align:center;
 }
+.about ul li {
+      list-style-position: inside;
+}
 a {
   color:white;
   font-weight: bold;
