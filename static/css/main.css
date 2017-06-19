@@ -151,6 +151,10 @@ footer {
 
 }
 
+footer a{
+  font-family:monospace;
+}
+
 .about {
   flex: 1 0 auto;
   width: 70%;

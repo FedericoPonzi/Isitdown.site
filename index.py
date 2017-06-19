@@ -6,9 +6,12 @@ import requests
 from urllib3.exceptions import ReadTimeoutError
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+#from sqlalchemy.dialects import postgresql
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 class Pings(db.Model):
@@ -28,21 +31,18 @@ class Pings(db.Model):
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
-from sqlalchemy.dialects import postgresql
 
 @app.route("/")
 @app.route("/<string:host>")
 def check(host=""):
     # there must be a better way, "for the moment" this works:
     q = Pings.query.order_by(Pings.at.desc()).from_self().distinct(Pings.t).limit(10).from_self().order_by(Pings.at.desc())
-    print (str(q.statement.compile(dialect=postgresql.dialect())))
+    #print (str(q.statement.compile(dialect=postgresql.dialect())))
     res = q.all()
     last = [x.t for x in res]
     if len(host) == 0:
         return render_template("index.html", last=res)
     return render_template("check.html", pingres=doPing(host), host=host, last=res)
-
-
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -63,7 +63,6 @@ def doPing(host):
     except Exception as e:
         # Host not found, and other
         print(repr(e))
-
         if "service not known" in repr(e):
             print(res)
             return res
