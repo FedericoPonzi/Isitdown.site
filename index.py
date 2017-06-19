@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, Markup
 import os
 import subprocess
 import requests
@@ -16,27 +16,33 @@ class Pings(db.Model):
     f = db.Column(db.String(120)) # from
     t = db.Column(db.String(120)) # to
     at = db.Column(db.DateTime) # at
+    down = db.Column(db.Boolean) # is it down?
 
-    def __init__(self, f, t, at):
+    def __init__(self, f, t, at, d):
         self.f = f
         self.t = t
         self.at = at
+        self.down = d
 
     def __repr__(self):
-        return '<from: %r, to: %r, at: %r>' % (self.f, self.t, self.at)
+        return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
+
+from sqlalchemy.dialects import postgresql
 
 @app.route("/")
 @app.route("/<string:host>")
 def check(host=""):
-    res = Pings.query.order_by(Pings.at.desc()).limit(5).all()
-    print(res)
+    q = Pings.query.order_by(Pings.at).from_self().distinct(Pings.t)
+    res = q.all()
+    last = [x.t for x in res]
     if len(host) == 0:
-        return render_template("index.html")
-    return render_template("check.html", pingres=doPing(host), host=host)
+        return render_template("index.html", last=res)
+    return render_template("check.html", pingres=doPing(host), host=host, last=res)
 
 @app.route("/favicon.ico")
 def favicon():
      return send_file("static/img/favicon.ico", mimetype='image/ico')
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -44,16 +50,16 @@ def page_not_found(error):
 def doPing(host):
     host = host if host[:7] == "http://" else "http://" + host
     print("Request " + host)
-    res = "up."
+    res = "down"
+    down = True
     try:
         resp = requests.head(host, timeout=2) #Every response is good :)
-    except ReadTimeoutError as e:
-        res="down."
+        res = "up"
+        down = False
     except Exception as e:
         # Host not found, and other
         print(repr(e))
-        res="down."
-    p = Pings(request.remote_addr, host, datetime.datetime.utcnow())
+    p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), down)
     db.session.add(p)
     db.session.commit()
     return res

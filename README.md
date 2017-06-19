@@ -20,3 +20,6 @@ The site should limit the number check to a host. In order to do this, it should
 # Db:
 createuser -W isitdownu
 id datetime ip host
+Pings.query.filter(Pings.query.distinct(Pings.at).limit(5).order_by(Pings.at.desc)).all()
+
+SELECT * FROM MyTable WHERE at IN (SELECT DISTINCT t FROM pings LIMIT 5 ORDER BY at DESC);

@@ -93,6 +93,16 @@ form{
   border-radius: 5px;
   background: #52BAAF
 }
+#lastconnections{
+
+}
+.up{
+    border-bottom: 3px solid #50ff3b;
+}
+.down{
+    border-bottom: 3px solid #ff5c5c;
+}
+
 #host {
     padding:5px;
     border:2px solid #52BAAF;

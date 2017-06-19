@@ -32,8 +32,20 @@
           {% block content %}
           {% endblock %}
         </div>
-
+        <div class="lastconnections">
+          <h3>Last checked: </h3>
+          <table>
+          {% for el in last %}
+            <tr>
+              <td>
+                <span class="{% if el.down %}down{% else %} up {% endif %}">{{ el.t }}</span></a>
+              </td>
+            </tr>
+          {% endfor %}
+          </table>
+        </div>
         <div class="about">
+          <h2>About</h2>
           <p>With this site you can easily check if a site is down or if you have a connection problem.</p>
           <p>The most common problems are:
             <ul>
@@ -47,7 +59,6 @@
         <!--script src="js/main.js"></script-->
         <script>
         function checkHost(){
-            console.log("Called.");
             var domain = '/' + document.getElementById('host').value;
             console.log(domain)
             window.location = domain;
