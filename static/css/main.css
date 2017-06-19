@@ -90,15 +90,26 @@ form {
   border-radius: 5px;
   background: #52BAAF
 }
-#lastconnections{
+.lastConnections{
 
 }
+.lastConnections table{
+  margin: 0 auto;
+}
+.hostList{
+  border-bottom: 3px solid;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+}
+.hostList::after{
+  text-decoration: none;
+}
 .hostUp{
-    border-bottom: 3px solid #50ff3b;
+    border-bottom-color: #50ff3b;
 }
 
 .hostDown{
-    border-bottom: 3px solid #ff5c5c;
+    border-bottom-color: #ff5c5c;
 }
 
 #host {
@@ -127,7 +138,7 @@ form {
   font-size: 1.2em;
 }
 
-.h3{
+.h2{
   font-size: 2em;
 }
 
@@ -149,6 +160,7 @@ footer {
 a {
   color:white;
   font-weight: bold;
+  text-decoration: none;
 }
 @keyframes slideIn {
     0% {

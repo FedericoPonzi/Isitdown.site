@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_file, Markup
+from socket import gaierror
 import os
 import subprocess
 import requests
@@ -32,7 +33,9 @@ from sqlalchemy.dialects import postgresql
 @app.route("/")
 @app.route("/<string:host>")
 def check(host=""):
-    q = Pings.query.order_by(Pings.at).from_self().distinct(Pings.t)
+    # there must be a better way, "for the moment" this works:
+    q = Pings.query.order_by(Pings.at.desc()).from_self().distinct(Pings.t).limit(10).from_self().order_by(Pings.at.desc())
+    print (str(q.statement.compile(dialect=postgresql.dialect())))
     res = q.all()
     last = [x.t for x in res]
     if len(host) == 0:
@@ -48,17 +51,25 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 def doPing(host):
-    host = host if host[:7] == "http://" else "http://" + host
-    print("Request " + host)
+    httpHost = "http://" + host
+    print("Requested " + httpHost)
     res = "down"
     down = True
     try:
-        resp = requests.head(host, timeout=2) #Every response is good :)
+        resp = requests.head(httpHost, timeout=2) #Every response is good :)
         res = "up"
         down = False
+    except gaierror as e:
+        # Name or service not found. Not gonna save it in the db
+        return res
     except Exception as e:
         # Host not found, and other
         print(repr(e))
+
+        if "service not known" in repr(e):
+            print(res)
+            return res
+
     p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), down)
     db.session.add(p)
     db.session.commit()

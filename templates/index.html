@@ -22,7 +22,7 @@
     </head>
     <body>
         <div class="container">
-          <img src="{{ url_for('static', filename='img/logo.png') }}" width="64" height="64" alt="logo" class="logo">
+          <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" width="64" height="64" alt="logo" class="logo"></a>
           <div class="title">IS IT DOWN?</div>
           <form>
             <input id="host" type="text" value="{{ host }}" placeholder="google.it">
@@ -32,13 +32,13 @@
           {% block content %}
           {% endblock %}
         </div>
-        <div class="lastconnections">
-          <h3>Last checked: </h3>
+        <div class="lastConnections">
+          <h2>Last checked: </h2>
           <table>
           {% for el in last %}
             <tr>
               <td>
-                <a href="/{{ el.t }}"><span class="{% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span></a>
+                <a href="/{{ el.t }}"><span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span></a>
               </td>
             </tr>
           {% endfor %}
@@ -59,7 +59,10 @@
         <!--script src="js/main.js"></script-->
         <script>
         function checkHost(){
-            var domain = '/' + document.getElementById('host').value;
+            var h = document.getElementById('host').value.toLowerCase();
+            h = h.startsWith("http://")? h.substring(7): h
+            h = h.startsWith("https://") ? h.substring(8) : h
+            var domain = '/' + h;
             console.log(domain)
             window.location = domain;
             console.log(window.location)
