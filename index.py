@@ -42,9 +42,7 @@ def check(host=""):
         return render_template("index.html", last=res)
     return render_template("check.html", pingres=doPing(host), host=host, last=res)
 
-@app.route("/favicon.ico")
-def favicon():
-     return send_file("static/img/favicon.ico", mimetype='image/ico')
+
 
 @app.errorhandler(404)
 def page_not_found(error):

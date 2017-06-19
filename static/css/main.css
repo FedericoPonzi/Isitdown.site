@@ -86,7 +86,6 @@ body {
 
 form {
   display: inline-block;
-  border:2px solid #52BAAF;
   border-radius: 5px;
   background: #52BAAF
 }
@@ -113,13 +112,15 @@ form {
 }
 
 #host {
-    padding:5px;
-    border:2px solid #52BAAF;
+    padding:9px;
     width: 200px;
     height: 30px;
+    border: 0px;
     padding-right: 50px;
     color:black;
     letter-spacing: 1.2px;
+    border-bottom-left-radius : 5px;
+    border-top-left-radius: 5px;
 }
 #host:focus{
     border-color: yellow;
