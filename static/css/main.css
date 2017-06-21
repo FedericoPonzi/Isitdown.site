@@ -83,7 +83,9 @@ body {
   font-size: 3em;
   letter-spacing: 2px;
 }
-
+.logo{
+  width:100px;
+}
 form {
   display: inline-block;
   border-radius: 5px;

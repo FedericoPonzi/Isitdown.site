@@ -27,7 +27,12 @@ class Pings(db.Model):
         self.t = t
         self.at = at
         self.down = d
-
+    @classmethod
+    def getLastPings(n=10):
+        i = db.session.query(db.func.max(Pings.id).label("MaxId"), Pings.t).group_by(Pings.t).subquery()
+        p = Pings.query.join(i, i.c.MaxId == Pings.id).order_by(Pings.id.desc()).limit(10)
+        res = p.all()
+        return res
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
@@ -35,10 +40,7 @@ class Pings(db.Model):
 @app.route("/")
 @app.route("/<string:host>")
 def check(host=""):
-    # there must be a better way, "for the moment" this works:
-    q = Pings.query.order_by(Pings.at.desc()).from_self().distinct(Pings.t).limit(10).from_self().order_by(Pings.at.desc())
-    #print (str(q.statement.compile(dialect=postgresql.dialect())))
-    res = q.all()
+    res = Pings.getLastPings()
     last = [x.t for x in res]
     if len(host) == 0:
         return render_template("index.html", last=res)
