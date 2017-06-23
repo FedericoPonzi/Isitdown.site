@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, Markup
+from flask import Flask, render_template, request, send_file, Markup, json, jsonify
 from socket import gaierror
 import os
 import subprocess
@@ -6,6 +6,7 @@ import requests
 from urllib3.exceptions import ReadTimeoutError
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+
 #from sqlalchemy.dialects import postgresql
 
 app = Flask(__name__)
@@ -36,6 +37,9 @@ class Pings(db.Model):
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
+@app.route("/api/<string:host>")
+def jsonCheck(host=""):
+    return jsonify(isitdown=doPing(host))
 
 @app.route("/")
 @app.route("/<string:host>")
@@ -53,26 +57,23 @@ def page_not_found(error):
 def doPing(host):
     httpHost = "http://" + host
     print("Requested " + httpHost)
-    res = "down"
     down = True
     try:
         resp = requests.head(httpHost, timeout=2) #Every response is good :)
-        res = "up"
         down = False
     except gaierror as e:
         # Name or service not found. Not gonna save it in the db
-        return res
+        return down
     except Exception as e:
         # Host not found, and other
         print(repr(e))
         if "service not known" in repr(e):
-            print(res)
-            return res
+            return down
 
     p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), down)
     db.session.add(p)
     db.session.commit()
-    return res
+    return down
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     db.create_all()

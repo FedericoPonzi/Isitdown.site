@@ -150,7 +150,8 @@ footer {
   padding-top: 20px;
   padding-bottom: 20px;
   flex: 1 0 auto;
-
+  background-color:#293B4D;
+  margin-top:15px;
 }
 
 footer a{
