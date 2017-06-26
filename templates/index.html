@@ -73,6 +73,7 @@
             var h = document.getElementById('host').value.toLowerCase();
             h = h.startsWith("http://")? h.substring(7): h
             h = h.startsWith("https://") ? h.substring(8) : h
+            h = h.indexOf("/") > 0 ? h.substring(0,h.indexOf("/")) : h
             var domain = '/' + h;
             console.log(domain)
             window.location = domain;
