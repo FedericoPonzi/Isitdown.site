@@ -55,25 +55,24 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 def doPing(host):
+    '''@Return true, if host is down. False otherwise'''
+
     httpHost = "http://" + host
     print("Requested " + httpHost)
-    down = True
+    isDown = True
     try:
         resp = requests.head(httpHost, timeout=2) #Every response is good :)
-        down = False
+        isDown = False
     except gaierror as e:
-        # Name or service not found. Not gonna save it in the db
-        return down
+        # Name or service not found. Not gonna save it.
+        return True
     except Exception as e:
-        # Host not found, and other
         print(repr(e))
-        if "service not known" in repr(e):
-            return down
-
-    p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), down)
+    p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), isDown)
     db.session.add(p)
     db.session.commit()
-    return down
+    return isDown
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     db.create_all()
