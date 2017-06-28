@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, Markup, json, jsonify
+from flask import Flask, render_template, request, send_file, Markup, json, jsonify, send_from_directory
 from socket import gaierror
 import os
 import subprocess
@@ -41,6 +41,13 @@ class Pings(db.Model):
 def jsonCheck(host=""):
     return jsonify(isitdown=doPing(host))
 
+#Some static files:
+@app.route("/favicon.ico")
+@app.route("/robots.txt")
+@app.route("/sitemap.xml")
+def getRobots():
+    return send_from_directory(app.static_folder, request.path[1:])
+
 @app.route("/")
 @app.route("/<string:host>")
 def check(host=""):
@@ -56,7 +63,6 @@ def page_not_found(error):
 
 def doPing(host):
     '''@Return true, if host is down. False otherwise'''
-
     httpHost = "http://" + host
     print("Requested " + httpHost)
     isDown = True
