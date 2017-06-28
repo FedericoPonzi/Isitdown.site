@@ -11,4 +11,4 @@
 
     HTML5, CSS3
     Python, Heroku
-    Flask, Modernizr
+    Flask, Coffee

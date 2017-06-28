@@ -45,6 +45,7 @@ def jsonCheck(host=""):
 @app.route("/favicon.ico")
 @app.route("/robots.txt")
 @app.route("/sitemap.xml")
+@app.route("/humans.txt")
 def getRobots():
     return send_from_directory(app.static_folder, request.path[1:])
 
