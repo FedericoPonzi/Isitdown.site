@@ -75,7 +75,7 @@ def doPing(host):
         return True
     except Exception as e:
         print(repr(e))
-    p = Pings(request.remote_addr,  Markup(host), datetime.datetime.utcnow(), isDown)
+    p = Pings(request.access_route[-1],  Markup(host), datetime.datetime.utcnow(), isDown)
     db.session.add(p)
     db.session.commit()
     return isDown
