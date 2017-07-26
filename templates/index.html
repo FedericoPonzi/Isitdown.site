@@ -45,7 +45,7 @@
           {% for el in last %}
             <tr>
               <td>
-                <a href="/{{ el.t }}"><span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span></a>
+                <a href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow"><span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span></a>
               </td>
             </tr>
           {% endfor %}
