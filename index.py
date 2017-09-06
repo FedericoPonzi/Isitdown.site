@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, Markup, json, jsonify, send_from_directory
+from flask import Flask, render_template, request, send_file, Markup, json, jsonify, send_from_directory, Blueprint
 from socket import gaierror
 import os
 import subprocess
@@ -14,36 +14,37 @@ def create_app(DATABASE_URI):
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    init_routes(app)
+    app.register_blueprint(bp)
     db.init_app(app)
     #db.create_all()
     return app
+    
+bp = Blueprint('index', __name__, template_folder="templates")
 
-def init_routes(app):
-    @app.route("/api/<string:host>")
-    def jsonCheck(host=""):
-        return jsonify(isitdown=doPing(host))
+@bp.route("/api/<string:host>")
+def jsonCheck(host=""):
+    return jsonify(isitdown=doPing(host))
 
-    #Some static files:
-    @app.route("/favicon.ico")
-    @app.route("/robots.txt")
-    @app.route("/sitemap.xml")
-    @app.route("/humans.txt")
-    def getRobots():
-        return send_from_directory(app.static_folder, request.path[1:])
+#Some static files:
+@bp.route("/favicon.ico")
+@bp.route("/robots.txt")
+@bp.route("/sitemap.xml")
+@bp.route("/humans.txt")
+def getRobots():
+    return send_from_directory(app.static_folder, request.path[1:])
 
-    @app.route("/")
-    @app.route("/<string:host>")
-    def check(host=""):
-        res = Pings.getLastPings()
-        last = [x.t for x in res]
-        if len(host) == 0:
-            return render_template("index.html", last=res)
-        return render_template("check.html", pingres=doPing(host), host=host, last=res)
+@bp.route("/")
+@bp.route("/<string:host>")
+def check(host=""):
+    res = Pings.getLastPings()
+    last = [x.t for x in res]
+    if len(host) == 0:
+        return render_template("index.html", last=res)
+    return render_template("check.html", pingres=doPing(host), host=host, last=res)
 
-    @app.errorhandler(404)
-    def page_not_found(error):
-        return render_template('404.html'), 404
+@bp.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 
 
