@@ -8,15 +8,44 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 #from sqlalchemy.dialects import postgresql
+db = SQLAlchemy()
 
 def create_app(DATABASE_URI):
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI 
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    init_routes(app)
     db.init_app(app)
+    #db.create_all()
     return app
 
-db = SQLAlchemy()
+def init_routes(app):
+    @app.route("/api/<string:host>")
+    def jsonCheck(host=""):
+        return jsonify(isitdown=doPing(host))
+
+    #Some static files:
+    @app.route("/favicon.ico")
+    @app.route("/robots.txt")
+    @app.route("/sitemap.xml")
+    @app.route("/humans.txt")
+    def getRobots():
+        return send_from_directory(app.static_folder, request.path[1:])
+
+    @app.route("/")
+    @app.route("/<string:host>")
+    def check(host=""):
+        res = Pings.getLastPings()
+        last = [x.t for x in res]
+        if len(host) == 0:
+            return render_template("index.html", last=res)
+        return render_template("check.html", pingres=doPing(host), host=host, last=res)
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('404.html'), 404
+
+
 
 class Pings(db.Model):
     __tablename__ = "pings"
@@ -40,30 +69,6 @@ class Pings(db.Model):
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
-@app.route("/api/<string:host>")
-def jsonCheck(host=""):
-    return jsonify(isitdown=doPing(host))
-
-#Some static files:
-@app.route("/favicon.ico")
-@app.route("/robots.txt")
-@app.route("/sitemap.xml")
-@app.route("/humans.txt")
-def getRobots():
-    return send_from_directory(app.static_folder, request.path[1:])
-
-@app.route("/")
-@app.route("/<string:host>")
-def check(host=""):
-    res = Pings.getLastPings()
-    last = [x.t for x in res]
-    if len(host) == 0:
-        return render_template("index.html", last=res)
-    return render_template("check.html", pingres=doPing(host), host=host, last=res)
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
 
 def doPing(host):
     '''@Return true, if host is down. False otherwise'''
@@ -85,6 +90,5 @@ def doPing(host):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    db.create_all()
     app = create_app(DATABASE_URI = os.environ["DATABASE_URL"])
     app.run(host='0.0.0.0', port=port)
