@@ -9,11 +9,14 @@ import datetime
 
 #from sqlalchemy.dialects import postgresql
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def create_app(DATABASE_URI):
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI 
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    return app
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 class Pings(db.Model):
     __tablename__ = "pings"
@@ -83,4 +86,5 @@ def doPing(host):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     db.create_all()
+    app = create_app(DATABASE_URI = os.environ["DATABASE_URL"])
     app.run(host='0.0.0.0', port=port)
