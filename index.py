@@ -19,7 +19,7 @@ def create_app(DATABASE_URI):
     #db.create_all()
     return app
     
-bp = Blueprint('index', __name__, template_folder="templates")
+bp = Blueprint('index', __name__, static_folder="/static", template_folder="templates")
 
 @bp.route("/api/<string:host>")
 def jsonCheck(host=""):
@@ -31,7 +31,7 @@ def jsonCheck(host=""):
 @bp.route("/sitemap.xml")
 @bp.route("/humans.txt")
 def getRobots():
-    return send_from_directory(app.static_folder, request.path[1:])
+    return send_from_directory(bp.static_folder, request.path[1:])
 
 @bp.route("/")
 @bp.route("/<string:host>")
