@@ -5,7 +5,10 @@ import subprocess
 import requests
 from urllib3.exceptions import ReadTimeoutError
 from flask_sqlalchemy import SQLAlchemy
-import datetime
+from sqlalchemy.sql.expression import and_
+from sqlalchemy import desc
+
+from datetime import datetime, timedelta
 
 #from sqlalchemy.dialects import postgresql
 db = SQLAlchemy()
@@ -18,7 +21,7 @@ def create_app(DATABASE_URI):
     db.init_app(app)
     #db.create_all()
     return app
-    
+
 bp = Blueprint('index', __name__, static_folder="/static", template_folder="templates")
 
 @bp.route("/api/<string:host>")
@@ -37,10 +40,9 @@ def getRobots():
 @bp.route("/<string:host>")
 def check(host=""):
     res = Pings.getLastPings()
-    last = [x.t for x in res]
     if len(host) == 0:
         return render_template("index.html", last=res)
-    return render_template("check.html", pingres=doPing(host), host=host, last=res)
+    return render_template("check.html", pingres=Pings.isLastPingSuccessfull(host) or doPing(host), host=host, last=res)
 
 @bp.errorhandler(404)
 def page_not_found(error):
@@ -61,12 +63,24 @@ class Pings(db.Model):
         self.t = t
         self.at = at
         self.down = d
+
     @classmethod
     def getLastPings(n=10):
-        i = db.session.query(db.func.max(Pings.id).label("MaxId"), Pings.t).group_by(Pings.t).subquery()
-        p = Pings.query.join(i, i.c.MaxId == Pings.id).order_by(Pings.id.desc()).limit(10)
-        res = p.all()
-        return res
+        p = db.session.query(Pings.t, Pings.down, db.func.max(Pings.id).label("id")).order_by(desc("id")).group_by(Pings.t, Pings.down).limit(10)
+        return p.all()
+
+    def isLastPingSuccessfull(host):
+        """
+            Caches/limit requests to down sites to 1 per minute.
+            Returns
+            ------
+            True, if the host was reported as up in the last minute
+            False, otherwise.
+        """
+        oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
+        last = Pings.query.filter(and_(Pings.t == host, oneMinuteAgo < Pings.at )).all()
+        return len(last) > 0 and last[0].down
+
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
@@ -84,10 +98,11 @@ def doPing(host):
         return True
     except Exception as e:
         print(repr(e))
-    p = Pings(request.access_route[-1],  Markup(host), datetime.datetime.utcnow(), isDown)
+    p = Pings(request.access_route[-1],  Markup(host), datetime.utcnow(), isDown)
     db.session.add(p)
     db.session.commit()
     return isDown
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
