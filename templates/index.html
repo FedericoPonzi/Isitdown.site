@@ -19,18 +19,17 @@
         <meta property="og:description" content="Check if a site is really down and find out if you have a connection problem.">
         <meta property="og:url" content="http://isitdown.site/">
         <meta property="og:image" content="http://isitdown.site/static/img/logo.png">
-        <meta property="og:site_name" content="Isitdown.site"
-
-
+        <meta property="og:site_name" content="Isitdown.site">
+        <link href="https://fonts.googleapis.com/css?family=Open Sans|Roboto" rel="stylesheet">
         <!--[if lt IE 9]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
             <script>window.html5 || document.write('<script src="{{ url_for('static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
         <![endif]-->
     </head>
     <body>
-        <div class="container">
+        <div class="main">
           <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
-          <div class="title">IS IT DOWN?</div>
+          <h1>IS IT DOWN?</h1>
           <form>
             <input id="host" type="text" value="{{ host }}" placeholder="google.it">
             <button id="check" type="submit" onclick="return checkHost()">Check it</button>
@@ -39,7 +38,7 @@
           {% block content %}
           {% endblock %}
         </div>
-        <div class="lastConnections">
+        <div class="card lastConnections">
           <h2>Last checked: </h2>
           <table>
           {% for el in last %}
@@ -51,7 +50,7 @@
           {% endfor %}
           </table>
         </div>
-        <div class="about">
+        <section class="card about">
           <h2>About</h2>
           <p>With this site you can easily check if a site is down or if you have a connection problem.</p>
           <p>The most common problems are:
@@ -61,11 +60,12 @@
               <li>DNS Problem: It may happen that your host blocks that domain. Try to use an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a>.</li>
             </ul>
           </p>
-        </div>
-        <div class="cline">
+        </section>
+        <div class="card cline">
           <h2>Command line lover?</h2>
           <p>Check if a site is down via command line, as simple as this:</p>
           <code>curl http://isitdown.site/api/google.com</code>
+        </div>
         <footer>
           This site is <a href="http://github.com/FedericoPonzi/isitdown.site" title="Isitdown.site on Github">open source</a> | Developed with <img height="16"  src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPHBhdGggc3R5bGU9ImZpbGw6I0U2NTYzQTsiIGQ9Ik0yNTYsNDc4LjYwOWMtMy44NywwLTcuNzM5LTEuMzQyLTEwLjg2NC00LjAyMWMtMTUuNDA4LTEzLjIwMS0zMC4zNDMtMjUuODQ4LTQ0LjcyOS0zOC4wMjIgIEM4NC4wNjUsMzM4LjA4MSwwLDI2Ni45MjMsMCwxNzUuNTU5QzAsOTQuNTExLDU3LjQxOSwzMy4zOTEsMTMzLjU2NSwzMy4zOTFjNjQuNzgyLDAsMTAzLjExOSw0NS4yMDEsMTIyLjQzNSw3OC4wOTggIGMxOS4zMTYtMzIuODk3LDU3LjY1Mi03OC4wOTgsMTIyLjQzNS03OC4wOThDNDU0LjU4MSwzMy4zOTEsNTEyLDk0LjUxMSw1MTIsMTc1LjU1OWMwLDkxLjM2NC04NC4wNjUsMTYyLjUyMi0yMDAuNDA4LDI2MS4wMDUgIGMtMTQuMzg2LDEyLjE3NC0yOS4zMjEsMjQuODIxLTQ0LjcyOSwzOC4wMjJDMjYzLjczOSw0NzcuMjY2LDI1OS44Nyw0NzguNjA5LDI1Niw0NzguNjA5eiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRDk0NzJCOyIgZD0iTTI2Ni44NjQsNDc0LjU4N2MxNS40MDgtMTMuMjAxLDMwLjM0My0yNS44NDgsNDQuNzI5LTM4LjAyMiAgQzQyNy45MzUsMzM4LjA4MSw1MTIsMjY2LjkyMyw1MTIsMTc1LjU1OWMwLTgxLjA0OC01Ny40MTktMTQyLjE2OC0xMzMuNTY1LTE0Mi4xNjhjLTY0Ljc4MiwwLTEwMy4xMTksNDUuMjAxLTEyMi40MzUsNzguMDk4djM2Ny4xMiAgQzI1OS44Nyw0NzguNjA5LDI2My43MzksNDc3LjI2NiwyNjYuODY0LDQ3NC41ODd6Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> by <a href="http://twitter.com/federico_ponzi">@Federico_Ponzi</a> | Useful? I like <a href="https://paypal.me/federicoponzi">coffee</a> :)
         </footer>

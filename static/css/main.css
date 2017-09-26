@@ -1,4 +1,4 @@
-/*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300);
 
 html {
     color: #222;
@@ -67,8 +67,31 @@ body {
   display: flex;
   flex-direction: column;
   color: #fff;
+  font-family: 'Open Sans', sans-serif;
 }
-.container{
+.card{
+  margin: 25px auto;
+  padding: 20px 0;
+  background-color: white;
+  color: black;
+  width: 70%;
+  border: 1px solid rgba(0, 0, 0, 0.34);
+  color:black;
+
+}
+.card {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.card:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.card a{
+  color: black;
+}
+
+.main{
   padding-top: 1em;
   text-align:center;
   min-width: 100%;
@@ -77,12 +100,21 @@ body {
   flex: 1 0 auto;
   padding-bottom:3em;
   background-color:#293B4D;
+  border-bottom: 1px solid black;
 
 }
-.title{
+h1 {
   font-size: 3em;
   letter-spacing: 2px;
 }
+h2{
+  font-size: 2em;
+  font-weight: 100;
+}
+h1, h2, h3, h4, h5{
+  font-family: 'Roboto', sans-serif;
+}
+
 .logo{
   width:100px;
 }
@@ -97,6 +129,9 @@ form {
 .lastConnections table{
   margin: 0 auto;
 }
+.lastConnections table tr td {
+    text-align: right;
+}
 .hostList{
   border-bottom: 3px solid;
   letter-spacing: 1.5px;
@@ -108,7 +143,6 @@ form {
 .hostUp{
     border-bottom-color: #50ff3b;
 }
-
 .hostDown{
     border-bottom-color: #ff5c5c;
 }
@@ -139,11 +173,13 @@ form {
   border-bottom-right-radius: 5px;
   border-bottom: 2px solid #52BAAF;
   font-size: 1.2em;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+#check:hover {
+    background-color: #217970;
+    box-shadow: 2px 2px 1px rgb(13, 20, 27);
 }
 
-.h2{
-  font-size: 2em;
-}
 
 footer {
   text-align:center;
@@ -173,18 +209,9 @@ a {
   font-weight: bold;
   text-decoration: none;
 }
-@keyframes slideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(20%)
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0)
-    }
+code {
+    background-color: rgba(255, 255, 0, 0.06);
 }
-
 
 /* ==========================================================================
    Media Queries
