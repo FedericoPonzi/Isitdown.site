@@ -27,7 +27,7 @@
         <![endif]-->
     </head>
     <body>
-        <div class="main">
+        <section class="main">
           <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
           <h1>IS IT DOWN?</h1>
           <form>
@@ -37,8 +37,8 @@
           </form>
           {% block content %}
           {% endblock %}
-        </div>
-        <div class="card lastConnections">
+        </section>
+        <section class="card lastConnections">
           <h2>Last checked: </h2>
           <table>
           {% for el in last %}
@@ -49,7 +49,7 @@
             </tr>
           {% endfor %}
           </table>
-        </div>
+        </section>
         <section class="card about">
           <h2>About</h2>
           <p>With this site you can easily check if a site is down or if you have a connection problem.</p>
