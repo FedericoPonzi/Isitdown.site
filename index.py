@@ -93,10 +93,9 @@ def doPing(host):
     try:
         resp = requests.head(httpHost, timeout=2) #Every response is good :)
         isDown = False
-    except gaierror as e:
-        # Name or service not found. Not gonna save it.
-        return True
     except Exception as e:
+        if "Name or service not known" in repr(e):
+            return True
         print(repr(e))
     p = Pings(request.access_route[-1],  Markup(host), datetime.utcnow(), isDown)
     db.session.add(p)
