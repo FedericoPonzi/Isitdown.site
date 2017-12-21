@@ -23,12 +23,7 @@ hr {
     padding: 0;
 }
 
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
+img{
     vertical-align: middle;
 }
 
@@ -189,6 +184,11 @@ footer a{
   font-family:monospace;
 }
 
+.about div {
+    padding: 10px 10px;
+    padding-top:0px;
+}
+
 .about {
   flex: 1 0 auto;
   width: 70%;
@@ -198,9 +198,11 @@ footer a{
 }
 .about ul {
   text-align: justify;
+  padding: 0 0;
 }
 .about ul li {
       list-style-position: inside;
+      text-align:center; 
 }
 a {
   color:white;
