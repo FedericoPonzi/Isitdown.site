@@ -16,9 +16,9 @@ It's made with:
  * You should have Postresql and Python 3.6 installed.
  * Create a user and a database for isitdown.site, and import the isitdown.db file.
  * Give build.sh run permissions: `chmod +x build.sh`
- * Open a terminal, and type `source venv/bin/activate` and then run `python3
-   index.py`
-
+ * Open a terminal, and run `./build.sh` to create the virtual environment and download the packets.
+ * Type `source venv/bin/activate` to activate the virtual environment and then run `python3
+   index.py` to run the site.
 
 ## License
 Please check LICENSE file.
