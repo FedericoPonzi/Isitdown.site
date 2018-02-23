@@ -2,7 +2,7 @@
 # The humans responsible & technology colophon
 
 # TEAM
-    Federico Ponzi -- fullstack -- @federico_ponzi
+    Federico Ponzi -- fullstack -- @federico_ponzi -- https://fponzi.me
 
 # THANKS
     Heroku: I'm just paying for the domain <3
@@ -10,5 +10,7 @@
 # TECHNOLOGY COLOPHON
 
     HTML5, CSS3
-    Python, Heroku
-    Flask, Coffee
+    Flask, Python3
+	Vim, Linode
+    Coffee
+	

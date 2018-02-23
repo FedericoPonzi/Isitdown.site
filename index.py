@@ -22,7 +22,7 @@ def create_app(DATABASE_URI):
     #db.create_all()
     return app
 
-bp = Blueprint('index', __name__, static_folder="/static", template_folder="templates")
+bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
 
 @bp.route("/api/<string:host>")
 def jsonCheck(host=""):
