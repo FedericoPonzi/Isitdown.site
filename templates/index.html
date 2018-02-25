@@ -1,98 +1,117 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        {% block head %}
-        <title>{% block title %} Is it down? Check if a site is down {% endblock %}</title>
-        <meta name="description" content="Check if a site is down, or if you have connection problem.">
-        {% endblock %}
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/minified.css') }}">
-        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
-        <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32" />
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16" />
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="Is it down? Check if a site is down">
-        <meta property="og:description" content="Check if a site is really down and find out if you have a connection problem.">
-        <meta property="og:url" content="http://isitdown.site/">
-        <meta property="og:image" content="http://isitdown.site/static/img/logo.png">
-        <meta property="og:site_name" content="Isitdown.site">
-        <link href="https://fonts.googleapis.com/css?family=Open%20Sans|Roboto" rel="stylesheet">
-        <!--[if lt IE 9]>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-            <script>window.html5 || document.write('<script src="{{ url_for('static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
-        <![endif]-->
-    </head>
-    <body>
-        <section class="main">
-          <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
-          <h1>IS IT DOWN?</h1>
-          <form>
-            <input id="host" type="text" value="{{ host }}" placeholder="google.it">
-            <button id="check" type="submit" onclick="return checkHost()">Check it</button>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  {% block head %}
+  <title>{% block title %} Is it down? Check if a site is down {% endblock %}</title>
+  <meta name="description" content="Check if a site is down, or if you have connection problem.">
+  {% endblock %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-theme.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/minified.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/new.css') }}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16" />
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Is it down? Check if a site is down">
+  <meta property="og:description" content="Check if a site is really down and find out if you have a connection problem.">
+  <meta property="og:url" content="http://isitdown.site/">
+  <meta property="og:image" content="http://isitdown.site/static/img/logo.png">
+  <meta property="og:site_name" content="Isitdown.site">
+  <link href="https://fonts.googleapis.com/css?family=Open%20Sans|Roboto" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script>window.html5 || document.write('<script src="{{ url_for('static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
+  <![endif]-->
 
-          </form>
-          {% block content %}
-          {% endblock %}
-        </section>
-        <section class="card lastConnections">
-          <h2>Last checked: </h2>
-          <table>
+</head>
+<body>
+  <section class="main">
+    <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
+    <h1>IS IT DOWN?</h1>
+    <form>
+      <input id="host" type="text" value="{{ host }}" placeholder="google.it">
+      <button id="check" type="submit" onclick="return checkHost()">Check it</button>
+
+    </form>
+    {% block content %}
+    {% endblock %}
+  </section>
+  <div class="row flex-row">
+    <div class="col-xs-12 col-s-12 col-md-4 col-lg-4 col-md-push-4">
+      <section class="card lastConnections">
+        <h2>Last checked: </h2>
+        <table>
           {% for el in last %}
-            <tr>
-              <td>
-                <a href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow"><span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span></a>
-              </td>
-            </tr>
+          <tr>
+            <td>
+              <a style="display:block;" href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow">
+                <span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span>
+              </a>
+              {% with pingtime=el.at.strftime("%Y-%m-%d %I.%M %p") %}
+              <span class="checktime" style="display:inline-block;margin-top: 2px;font-size: 11px;">{{ pingtime }}</span>
+              {% endwith %}
+            </td>
+          </tr>
           {% endfor %}
-          </table>
-        </section>
-        <section class="card about">
-          <h2>About</h2>
-          <div>
-          <p>With this site you can easily check if a site is down or if you have a connection problem.</p>
-          <p>The most common problems are:
+        </table>
+      </section>
+    </div>
+    <div class="co-xs-12 col-s-12 col-md-4 col-lg-4 col-md-pull-4">
+      <section class="card about">
+        <h2>About</h2>
+        <div>
+          <p>With this site you can easily check if a site is down or if you have one of the following most common problems:
             <ul>
-                <li><strong>Browser problem:</strong> Try clearing your browser cache. Hit ctrl+shift+r. Also, you can try to disable your ad-blocker and refresh the page.</li>
-                <li><strong>Router's problem:</strong> Restart your router.</li>
-                <li><strong>DNS Problem:</strong> It may happen that your host blocks that domain. Try to use an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a>.</li>
+              <li><strong>Browser problem:</strong> Try clearing your browser cache. Hit ctrl+shift+r.<br>Also, you can try to disable your ad-blocker and refresh the page.</li>
+              <li><strong>Router's problem:</strong> Restart your router.</li>
+              <li><strong>DNS Problem:</strong> It may happen that your host blocks that domain.<br>Try to use an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a>.</li>
             </ul>
           </p>
-          <p>Found a bug? Want a new feature? Fill an <a href="http://github.com/FedericoPonzi/isitdown.site/issues" title="isitdown.site on Github">issue on Github</a>.
-          </p>
-          </div>
-        </section>
+        </div>
+      </section>
+    </div>
+    <div class="col-xs-12 col-s-12 col-md-4 col-lg-4">
         <section class="card cline">
           <h2>Command line lover?</h2>
           <p>Check if a site is down via command line, as simple as this:</p>
           <code>curl https://isitdown.site/api/google.com</code>
         </section>
-        <footer>
-          This site is <a href="http://github.com/FedericoPonzi/isitdown.site" title="Isitdown.site on Github">open source</a> | Developed with <img height="16" alt="less then three" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPHBhdGggc3R5bGU9ImZpbGw6I0U2NTYzQTsiIGQ9Ik0yNTYsNDc4LjYwOWMtMy44NywwLTcuNzM5LTEuMzQyLTEwLjg2NC00LjAyMWMtMTUuNDA4LTEzLjIwMS0zMC4zNDMtMjUuODQ4LTQ0LjcyOS0zOC4wMjIgIEM4NC4wNjUsMzM4LjA4MSwwLDI2Ni45MjMsMCwxNzUuNTU5QzAsOTQuNTExLDU3LjQxOSwzMy4zOTEsMTMzLjU2NSwzMy4zOTFjNjQuNzgyLDAsMTAzLjExOSw0NS4yMDEsMTIyLjQzNSw3OC4wOTggIGMxOS4zMTYtMzIuODk3LDU3LjY1Mi03OC4wOTgsMTIyLjQzNS03OC4wOThDNDU0LjU4MSwzMy4zOTEsNTEyLDk0LjUxMSw1MTIsMTc1LjU1OWMwLDkxLjM2NC04NC4wNjUsMTYyLjUyMi0yMDAuNDA4LDI2MS4wMDUgIGMtMTQuMzg2LDEyLjE3NC0yOS4zMjEsMjQuODIxLTQ0LjcyOSwzOC4wMjJDMjYzLjczOSw0NzcuMjY2LDI1OS44Nyw0NzguNjA5LDI1Niw0NzguNjA5eiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRDk0NzJCOyIgZD0iTTI2Ni44NjQsNDc0LjU4N2MxNS40MDgtMTMuMjAxLDMwLjM0My0yNS44NDgsNDQuNzI5LTM4LjAyMiAgQzQyNy45MzUsMzM4LjA4MSw1MTIsMjY2LjkyMyw1MTIsMTc1LjU1OWMwLTgxLjA0OC01Ny40MTktMTQyLjE2OC0xMzMuNTY1LTE0Mi4xNjhjLTY0Ljc4MiwwLTEwMy4xMTksNDUuMjAxLTEyMi40MzUsNzguMDk4djM2Ny4xMiAgQzI1OS44Nyw0NzguNjA5LDI2My43MzksNDc3LjI2NiwyNjYuODY0LDQ3NC41ODd6Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> by <a href="http://twitter.com/federico_ponzi">@Federico_Ponzi</a> | Useful? I like <a href="https://paypal.me/federicoponzi">coffee</a> :)
-        </footer>
-        <script>
-        function checkHost(){
-            var h = document.getElementById('host').value.toLowerCase();
-            h = h.startsWith("http://")? h.substring(7): h
-            h = h.startsWith("https://") ? h.substring(8) : h
-            h = h.indexOf("/") > 0 ? h.substring(0,h.indexOf("/")) : h
-            var domain = '/' + h;
-            console.log(domain)
-            window.location = domain;
-            console.log(window.location)
-            return false;
-          };
-        </script>
-        <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-88039433-2', 'auto');
-        ga('set', 'anonymizeIp', true);
-        ga('send', 'pageview');
-        </script>
-    </body>
+        <section class="card features">
+          <h2>Found a bug?<br>Want a new feature?</h2>
+          <p>Fill an <a href="http://github.com/FedericoPonzi/isitdown.site/issues" title="isitdown.site on Github">issue on Github</a>.
+          </p>
+        </section>
+    </div>
+  </div>
+  <footer>
+    This site is <a href="http://github.com/FedericoPonzi/isitdown.site" title="Isitdown.site on Github">open source</a> | Developed with <img height="16" alt="less then three" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPHBhdGggc3R5bGU9ImZpbGw6I0U2NTYzQTsiIGQ9Ik0yNTYsNDc4LjYwOWMtMy44NywwLTcuNzM5LTEuMzQyLTEwLjg2NC00LjAyMWMtMTUuNDA4LTEzLjIwMS0zMC4zNDMtMjUuODQ4LTQ0LjcyOS0zOC4wMjIgIEM4NC4wNjUsMzM4LjA4MSwwLDI2Ni45MjMsMCwxNzUuNTU5QzAsOTQuNTExLDU3LjQxOSwzMy4zOTEsMTMzLjU2NSwzMy4zOTFjNjQuNzgyLDAsMTAzLjExOSw0NS4yMDEsMTIyLjQzNSw3OC4wOTggIGMxOS4zMTYtMzIuODk3LDU3LjY1Mi03OC4wOTgsMTIyLjQzNS03OC4wOThDNDU0LjU4MSwzMy4zOTEsNTEyLDk0LjUxMSw1MTIsMTc1LjU1OWMwLDkxLjM2NC04NC4wNjUsMTYyLjUyMi0yMDAuNDA4LDI2MS4wMDUgIGMtMTQuMzg2LDEyLjE3NC0yOS4zMjEsMjQuODIxLTQ0LjcyOSwzOC4wMjJDMjYzLjczOSw0NzcuMjY2LDI1OS44Nyw0NzguNjA5LDI1Niw0NzguNjA5eiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRDk0NzJCOyIgZD0iTTI2Ni44NjQsNDc0LjU4N2MxNS40MDgtMTMuMjAxLDMwLjM0My0yNS44NDgsNDQuNzI5LTM4LjAyMiAgQzQyNy45MzUsMzM4LjA4MSw1MTIsMjY2LjkyMyw1MTIsMTc1LjU1OWMwLTgxLjA0OC01Ny40MTktMTQyLjE2OC0xMzMuNTY1LTE0Mi4xNjhjLTY0Ljc4MiwwLTEwMy4xMTksNDUuMjAxLTEyMi40MzUsNzguMDk4djM2Ny4xMiAgQzI1OS44Nyw0NzguNjA5LDI2My43MzksNDc3LjI2NiwyNjYuODY0LDQ3NC41ODd6Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> by <a href="http://twitter.com/federico_ponzi">@Federico_Ponzi</a> | Useful? I like <a href="https://paypal.me/federicoponzi">coffee</a> :)
+  </footer>
+  <script>
+  function checkHost(){
+    var h = document.getElementById('host').value.toLowerCase();
+    h = h.startsWith("http://")? h.substring(7): h
+    h = h.startsWith("https://") ? h.substring(8) : h
+    h = h.indexOf("/") > 0 ? h.substring(0,h.indexOf("/")) : h
+    var domain = '/' + h;
+    console.log(domain)
+    window.location = domain;
+    console.log(window.location)
+    return false;
+  };
+  </script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88039433-2', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+  </script>
+</body>
 </html>
