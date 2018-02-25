@@ -7,6 +7,7 @@ from urllib3.exceptions import ReadTimeoutError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import and_
 from sqlalchemy import desc
+import datetime
 
 from datetime import datetime, timedelta
 
@@ -66,7 +67,7 @@ class Pings(db.Model):
 
     @classmethod
     def getLastPings(n=10):
-        p = db.session.query(Pings.t, Pings.down, db.func.max(Pings.id).label("id")).order_by(desc("id")).group_by(Pings.t, Pings.down).limit(10)
+        p = db.session.query(Pings.t, Pings.at, Pings.down, db.func.max(Pings.id).label("id")).order_by(desc("id")).group_by(Pings.t, Pings.at, Pings.down).limit(10)
         return p.all()
 
     def isLastPingSuccessfull(host):

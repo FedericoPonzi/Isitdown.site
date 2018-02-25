@@ -1,0 +1,54 @@
+.row{
+  margin:0px;
+}
+.flex-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .flex-row > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+    .flex-row.row:after,
+    .flex-row.row:before {
+        display: flex;
+    }
+
+.card{
+  width:100%;
+  /*padding: 30px 10px 0px 10px;*/
+  margin:auto;
+  margin-top: 30px;
+  flex: 1 0 auto;
+}
+
+.card:not(.cline){
+  margin-bottom:15px;
+}
+
+.card ul li, .hostList{
+  font-size: 2.5vmin;
+  margin-bottom:20px;
+}
+
+.lastConnections table, .about div {
+  margin: 40px auto 0px auto;
+}
+.about div{
+  margin-top:80px;
+}
+.cline p, .features p{
+  margin-top:55px;
+}
+
+form{
+  display:inline-flex;
+}
+
+#host{
+height: auto;
+}
+
+td{
+  word-break: break-all;
+}
