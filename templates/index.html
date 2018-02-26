@@ -49,11 +49,11 @@
           {% for el in last %}
           <tr>
             <td>
-              <a style="display:block;" href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow">
+              <a href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow">
                 <span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span>
               </a>
               {% with pingtime=el.at.strftime("%Y-%m-%d %I.%M %p") %}
-              <span class="checktime" style="display:inline-block;margin-top: 2px;font-size: 11px;">{{ pingtime }}</span>
+              <span class="checktime">{{ pingtime }}</span>
               {% endwith %}
             </td>
           </tr>
@@ -61,7 +61,7 @@
         </table>
       </section>
     </div>
-    <div class="co-xs-12 col-s-12 col-md-4 col-lg-4 col-md-pull-4">
+    <div class="col-xs-12 col-s-12 col-md-4 col-lg-4 col-md-pull-4">
       <section class="card about">
         <h2>About</h2>
         <div>
@@ -88,9 +88,11 @@
         </section>
     </div>
   </div>
+  <div class="row">
   <footer>
     This site is <a href="http://github.com/FedericoPonzi/isitdown.site" title="Isitdown.site on Github">open source</a> | Developed with <img height="16" alt="less then three" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPHBhdGggc3R5bGU9ImZpbGw6I0U2NTYzQTsiIGQ9Ik0yNTYsNDc4LjYwOWMtMy44NywwLTcuNzM5LTEuMzQyLTEwLjg2NC00LjAyMWMtMTUuNDA4LTEzLjIwMS0zMC4zNDMtMjUuODQ4LTQ0LjcyOS0zOC4wMjIgIEM4NC4wNjUsMzM4LjA4MSwwLDI2Ni45MjMsMCwxNzUuNTU5QzAsOTQuNTExLDU3LjQxOSwzMy4zOTEsMTMzLjU2NSwzMy4zOTFjNjQuNzgyLDAsMTAzLjExOSw0NS4yMDEsMTIyLjQzNSw3OC4wOTggIGMxOS4zMTYtMzIuODk3LDU3LjY1Mi03OC4wOTgsMTIyLjQzNS03OC4wOThDNDU0LjU4MSwzMy4zOTEsNTEyLDk0LjUxMSw1MTIsMTc1LjU1OWMwLDkxLjM2NC04NC4wNjUsMTYyLjUyMi0yMDAuNDA4LDI2MS4wMDUgIGMtMTQuMzg2LDEyLjE3NC0yOS4zMjEsMjQuODIxLTQ0LjcyOSwzOC4wMjJDMjYzLjczOSw0NzcuMjY2LDI1OS44Nyw0NzguNjA5LDI1Niw0NzguNjA5eiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojRDk0NzJCOyIgZD0iTTI2Ni44NjQsNDc0LjU4N2MxNS40MDgtMTMuMjAxLDMwLjM0My0yNS44NDgsNDQuNzI5LTM4LjAyMiAgQzQyNy45MzUsMzM4LjA4MSw1MTIsMjY2LjkyMyw1MTIsMTc1LjU1OWMwLTgxLjA0OC01Ny40MTktMTQyLjE2OC0xMzMuNTY1LTE0Mi4xNjhjLTY0Ljc4MiwwLTEwMy4xMTksNDUuMjAxLTEyMi40MzUsNzguMDk4djM2Ny4xMiAgQzI1OS44Nyw0NzguNjA5LDI2My43MzksNDc3LjI2NiwyNjYuODY0LDQ3NC41ODd6Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> by <a href="http://twitter.com/federico_ponzi">@Federico_Ponzi</a> | Useful? I like <a href="https://paypal.me/federicoponzi">coffee</a> :)
   </footer>
+</div>
   <script>
   function checkHost(){
     var h = document.getElementById('host').value.toLowerCase();

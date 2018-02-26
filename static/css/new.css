@@ -2,7 +2,7 @@
   margin:0px;
 }
 .flex-row {
-        display: flex;
+        display: -webkit-box;
         flex-wrap: wrap;
     }
     .flex-row > [class*='col-'] {
@@ -13,10 +13,14 @@
     .flex-row.row:before {
         display: flex;
     }
+    @media only screen and (max-width: 1024px) {
+      .flex-row{
+        display:block;
+      }
+    }
 
 .card{
   width:100%;
-  /*padding: 30px 10px 0px 10px;*/
   margin:auto;
   margin-top: 30px;
   flex: 1 0 auto;
@@ -41,14 +45,28 @@
   margin-top:55px;
 }
 
+td{
+  word-break: break-all;
+}
+
+td a{
+  display: block;
+}
+
+.checktime{
+  display:inline-block;
+  margin-top: 2px;
+  font-size:2vmin;
+}
+
+p{
+  font-size: 2.5vmin;
+}
+
 form{
   display:inline-flex;
 }
 
 #host{
 height: auto;
-}
-
-td{
-  word-break: break-all;
 }
