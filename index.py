@@ -67,7 +67,7 @@ class Pings(db.Model):
 
     @classmethod
     def getLastPings(n=10):
-        p = db.session.query(Pings.t, Pings.at, Pings.down, db.func.max(Pings.id).label("id")).order_by(desc("id")).group_by(Pings.t, Pings.at, Pings.down).limit(10)
+        p = db.session.query(Pings.t, Pings.down, db.func.max(Pings.at).label("at")).order_by(desc("at")).group_by(Pings.t, Pings.down).limit(10)
         return p.all()
 
     def isLastPingSuccessfull(host):
