@@ -178,13 +178,6 @@ padding-top: 20px;
 padding-bottom: 20px;
 background-color:#293B4D;
 margin-top:15px;
-
- position:fixed;
-	left:0px;
-	   bottom:0px;
-		  height:30px;
-			 width:100%;
-				background:#999;
 }
 
 a:hover{
