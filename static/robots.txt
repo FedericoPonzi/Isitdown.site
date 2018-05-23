@@ -2,3 +2,7 @@
 User-agent: *
 Allow: /$
 Disallow: /
+
+#Adieu stupid bot
+User-agent: MJ12bot
+Disallow: /
