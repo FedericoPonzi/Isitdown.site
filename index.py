@@ -1,3 +1,4 @@
+import socket
 import sys
 import datetime
 import os
@@ -50,7 +51,7 @@ def check(host=""):
 
 @bp.errorhandler(404)
 def page_not_found(error):
-    app.log_exception(error)
+    app.logger.error(error)
     return render_template('404.html'), 404
 
 
@@ -61,22 +62,23 @@ def doPing(host, prefix="https://"):
     httpHost = prefix + host
     isDown = True
     response_code = -1
-    logger.debug("Sending head request to:" + httpHost)
+    app.logger.debug("Sending head request to:" + httpHost)
 
     try:
         resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True)
-        app.logger.debug(resp.status_code)
         # If we come here, we had a response. So the site is up:
         isDown = False
         response_code = resp.status_code
     except Exception as e:
         if "Name or service not known" in repr(e):
             return True
-        logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
+        app.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
 
         # Check both https and http:
         if "Connection refused" in repr(e):
             return doPing(host, "http://")
+
+    # ip_addr = socket.gethostbyname(host) uh-uh
 
     p = Pings(request.access_route[-1],  Markup(host), datetime.utcnow(), isDown, response_code)
     PingsRepository.addPing(p)
@@ -85,10 +87,5 @@ def doPing(host, prefix="https://"):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    logger = logging.getLogger('isitdown_app')
-    logger.setLevel(logging.ERROR)
-    if os.environ.get("FLASK_ENV", "development") == "development":
-        logger.setLevel(logging.DEBUG)
-
     app = create_app(DATABASE_URI = os.environ["DATABASE_URI"])
     app.run(host='0.0.0.0', port=port)
