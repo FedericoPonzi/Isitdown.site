@@ -1,25 +1,31 @@
-import socket
-import sys
 import datetime
 import os
 from datetime import datetime
-import logging
 import requests
-from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint
+from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
-
-from pings import Pings, PingsRepository
+from isitdown.repository import Pings, PingsRepository
 
 
 db = SQLAlchemy()
+logger = None
+
+
+def init_db(app):
+    db.init_app(app)
+    #with app.app_context():
+    #    db.create_all() #TODO: This is not working. I've investigated for a while but cannot figure out why.
+    return db
 
 
 def create_app(DATABASE_URI):
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    #app.config['SQLALCHEMY_ECHO'] = True
+    init_db(app)
     app.register_blueprint(bp)
-    db.init_app(app)
+
     return app
 
 
@@ -62,7 +68,7 @@ def doPing(host, prefix="https://"):
     httpHost = prefix + host
     isDown = True
     response_code = -1
-    app.logger.debug("Sending head request to:" + httpHost)
+    current_app.logger.debug("Sending head request to:" + httpHost)
 
     try:
         resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True)
@@ -72,7 +78,7 @@ def doPing(host, prefix="https://"):
     except Exception as e:
         if "Name or service not known" in repr(e):
             return True
-        app.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
+        current_app.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
 
         # Check both https and http:
         if "Connection refused" in repr(e):
@@ -80,7 +86,7 @@ def doPing(host, prefix="https://"):
 
     # ip_addr = socket.gethostbyname(host) uh-uh
 
-    p = Pings(request.access_route[-1],  Markup(host), datetime.utcnow(), isDown, response_code)
+    p = Pings(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=isDown, response_code=response_code)
     PingsRepository.addPing(p)
     return isDown
 
@@ -89,3 +95,6 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app = create_app(DATABASE_URI = os.environ["DATABASE_URI"])
     app.run(host='0.0.0.0', port=port)
+    logger = app.logger
+
+

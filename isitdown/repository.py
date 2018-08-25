@@ -1,14 +1,16 @@
 from datetime import datetime, timedelta
 
+from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from sqlalchemy.sql.expression import and_
 
-#from sqlalchemy.dialects import postgresql
+
+# from sqlalchemy.dialects import postgresql
 db = SQLAlchemy()
 
+
 class Pings(db.Model):
-    __tablename__ = "pings"
     id = db.Column(db.Integer, primary_key=True)
     from_ip = db.Column(db.String(120))
     host = db.Column(db.String(120))
@@ -16,17 +18,20 @@ class Pings(db.Model):
     isdown = db.Column(db.Boolean)
     response_code = db.Column(db.Integer)
 
-    def __init__(self, from_ip, host, time_stamp, isdown, response_code):
+    '''   def __init__(self, from_ip, host, time_stamp, isdown, response_code):
+        def __init__(**kwargs):
+            super(Foo, self).__init__(**kwargs)
         self.response_code = response_code
         self.isdown = isdown
         self.time_stamp = time_stamp #at
         self.host = host #t
         self.from_ip = from_ip
-
+    '''
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
-class PingsRepository():
+
+class PingsRepository:
     """ Repository class for the Pings table. Used to do queries against the database."""
 
     @staticmethod

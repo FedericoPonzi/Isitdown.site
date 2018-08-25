@@ -21,7 +21,6 @@ It's made with:
  * Finally, run `python3 index.py` to run the site.
 
 There is also a flask.wsgi.template used to install it in apache.
-The Procfile is used by Heroku and it's not maintained anymore.
 
 ## Environment
  * `DATABASE_URI`: The database connection string.
