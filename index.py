@@ -61,7 +61,7 @@ def doPing(host, prefix="https://"):
     httpHost = prefix + host
     isDown = True
     response_code = -1
-    logger.debug("Hellos world")
+    logger.debug("Sending head request to:" + httpHost)
 
     try:
         resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True)

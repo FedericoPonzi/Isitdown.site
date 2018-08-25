@@ -2,15 +2,14 @@
 This is the source code for [isitdown.site](http://isitdown.site)
 
 It's made with: 
- * Flask (python), 
- * PostgreSQL (just to store the requests), 
+ * Flask (python3), 
+ * PostgreSQL, 
  * HTML5/CSS (with HTML5 boilerplate)
  * Was hosted on Heroku (<3 for them) but now it's hosted on Linode (<3 for 
     them too)
 
-*Please note: The logo is handmade thanks to 
-[Antonio Di Rosso](https://www.behance.net/nano88) 
-(check his profile!) so you should *not* use it in other projects.*
+*Please note: The logo is handmade by
+[Antonio Di Rosso](https://www.behance.net/nano88) so you should *not* use it in other projects.*
 
 ## Installation
  * You should have Postresql and Python 3.6 installed.
@@ -18,8 +17,16 @@ It's made with:
  * Give build.sh run permissions: `chmod +x build.sh`
  * Open a terminal, and run `./build.sh` to create the virtual environment and download the packets.
  * Type `source .venv/bin/activate` to activate the virtual environment
- * Add the database connection uri as enviornment variable: `export DATABASE_URL=postgresql://username:password@localhost/database`. You can add a `PORT` variable to ovverride the default listening port (5000).
+ * Add the database connection uri as enviornment variable: `export DATABASE_URI=postgresql://username:password@localhost/database`. You can add a `PORT` variable to ovverride the default listening port (5000).
  * Finally, run `python3 index.py` to run the site.
 
+There is also a flask.wsgi.template used to install it in apache.
+The Procfile is used by Heroku and it's not maintained anymore.
+
+## Environment
+ * `DATABASE_URI`: The database connection string.
+ * `PORT`: The port to listen on
+ * `FLASK_ENV`: With `development`, it will print useful debug messages.
+
 ## License
-Please check LICENSE file.
+Please check the LICENSE file.
