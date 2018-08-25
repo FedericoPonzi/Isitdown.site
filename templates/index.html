@@ -49,8 +49,8 @@
                                 {% for el in last %}
                                 <tr>
                                     <td>
-                                        <a href="/{{ el.t }}" title="{{ el.t }}" rel="nofollow">
-                                            <span class="hostList {% if el.down %}hostDown{% else %}hostUp{% endif %}">{{ el.t }}</span>
+                                        <a href="/{{ el.host }}" title="{{ el.host }}" rel="nofollow">
+                                            <span class="hostList {% if el.isdown %}hostDown{% else %}hostUp{% endif %}">{{ el.host }}</span>
                                         </a>
                                         {% with pingtime=el.at.strftime("%Y-%m-%d %I.%M %p") %}
                                         <span class="checktime">{{ pingtime }}</span>

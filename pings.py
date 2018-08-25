@@ -1,11 +1,8 @@
-import subprocess
-import requests
-from urllib3.exceptions import ReadTimeoutError
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql.expression import and_
-from sqlalchemy import desc
-
 from datetime import datetime, timedelta
+
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
+from sqlalchemy.sql.expression import and_
 
 #from sqlalchemy.dialects import postgresql
 db = SQLAlchemy()
@@ -13,25 +10,28 @@ db = SQLAlchemy()
 class Pings(db.Model):
     __tablename__ = "pings"
     id = db.Column(db.Integer, primary_key=True)
-    f = db.Column(db.String(120)) # from
-    t = db.Column(db.String(120)) # to
-    at = db.Column(db.DateTime) # at
-    down = db.Column(db.Boolean) # is it down?
+    from_ip = db.Column(db.String(120)) # from
+    host = db.Column(db.String(120)) # to
+    time_stamp = db.Column(db.DateTime) # at
+    isdown = db.Column(db.Boolean) # is it down?
+    response = db.Column(db.Integer)
 
-    def __init__(self, f, t, at, d):
-        self.f = f
-        self.t = t
-        self.at = at
-        self.down = d
+    def __init__(self, from_ip, host, timestamp, isdown, response):
+        self.response = response
+        self.isdown = isdown
+        self.timestamp = timestamp #at
+        self.host = host #t
+        self.from_ip = from_ip
 
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
 class PingsRepository():
     """ Repository class for the Pings table. Used to do queries against the database."""
+
     @staticmethod
     def getLastPings(n=10):
-        p = db.session.query(Pings.t, Pings.down, db.func.max(Pings.at).label("at")).order_by(desc("at")).group_by(Pings.t, Pings.down).limit(10)
+        p = db.session.query(Pings.host, Pings.isdown, db.func.max(Pings.time_stamp).label("at")).order_by(desc("at")).group_by(Pings.host, Pings.isdown).limit(10)
         return p.all()
 
     @staticmethod
@@ -44,7 +44,7 @@ class PingsRepository():
             False, otherwise.
         """
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
-        last = Pings.query.filter(and_(Pings.t == host, oneMinuteAgo < Pings.at )).all()
+        last = Pings.query.filter(and_(Pings.host == host, oneMinuteAgo < Pings.time_stamp )).all()
         return len(last) > 0 and last[0].down
 
     @staticmethod

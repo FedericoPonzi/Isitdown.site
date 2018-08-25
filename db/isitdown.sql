@@ -1,5 +1,8 @@
 --
 -- PostgreSQL database dump
+-- Create user isitdown and db isitdown
+--- create user isitdown with password 'mypass';
+--- GRANT ALL PRIVILEGES ON DATABASE "isitdown" to isitdown;
 --
 
 SET statement_timeout = 0;
@@ -19,22 +22,23 @@ SET default_with_oids = false;
 -- Name: pings; Type: TABLE; Schema: public; Owner: isitdownu; Tablespace: 
 --
 
-CREATE TABLE pings (
+CREATE TABLE IF NOT EXISTS pings(
     id integer NOT NULL,
-    f character varying(120),
-    t character varying(120),
-    at timestamp without time zone,
-    down boolean DEFAULT false NOT NULL
+    from_ip character varying(120),
+    host character varying(120),
+    time_stamp timestamp without time zone,
+    isdown boolean DEFAULT false NOT NULL,
+    resp_code int NOT NULL
 );
 
 
-ALTER TABLE public.pings OWNER TO isitdownu;
+ALTER TABLE public.pings OWNER TO isitdown;
 
 --
 -- Name: pings_id_seq; Type: SEQUENCE; Schema: public; Owner: isitdownu
 --
 
-CREATE SEQUENCE pings_id_seq
+CREATE SEQUENCE IF NOT EXISTS pings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -42,7 +46,7 @@ CREATE SEQUENCE pings_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pings_id_seq OWNER TO isitdownu;
+ALTER TABLE public.pings_id_seq OWNER TO isitdown;
 
 --
 -- Name: pings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: isitdownu
