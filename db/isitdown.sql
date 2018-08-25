@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS pings(
     host character varying(120),
     time_stamp timestamp without time zone,
     isdown boolean DEFAULT false NOT NULL,
-    resp_code int NOT NULL
+    response_code int NOT NULL
 );
 
 

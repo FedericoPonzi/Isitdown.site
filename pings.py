@@ -10,16 +10,16 @@ db = SQLAlchemy()
 class Pings(db.Model):
     __tablename__ = "pings"
     id = db.Column(db.Integer, primary_key=True)
-    from_ip = db.Column(db.String(120)) # from
-    host = db.Column(db.String(120)) # to
-    time_stamp = db.Column(db.DateTime) # at
-    isdown = db.Column(db.Boolean) # is it down?
-    response = db.Column(db.Integer)
+    from_ip = db.Column(db.String(120))
+    host = db.Column(db.String(120))
+    time_stamp = db.Column(db.DateTime)
+    isdown = db.Column(db.Boolean)
+    response_code = db.Column(db.Integer)
 
-    def __init__(self, from_ip, host, timestamp, isdown, response):
-        self.response = response
+    def __init__(self, from_ip, host, time_stamp, isdown, response_code):
+        self.response_code = response_code
         self.isdown = isdown
-        self.timestamp = timestamp #at
+        self.time_stamp = time_stamp #at
         self.host = host #t
         self.from_ip = from_ip
 
@@ -31,8 +31,14 @@ class PingsRepository():
 
     @staticmethod
     def getLastPings(n=10):
-        p = db.session.query(Pings.host, Pings.isdown, db.func.max(Pings.time_stamp).label("at")).order_by(desc("at")).group_by(Pings.host, Pings.isdown).limit(10)
+        '''
+        :param n:
+        :return: the last n pings
+        '''
+        p = db.session.query(Pings.host, Pings.isdown, Pings.response_code, db.func.max(Pings.time_stamp).label("time_stamp"))\
+            .order_by(desc("time_stamp")).group_by(Pings.host, Pings.isdown, Pings.response_code).limit(10)
         return p.all()
+
 
     @staticmethod
     def isLastPingSuccessfull(host):
@@ -45,7 +51,7 @@ class PingsRepository():
         """
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
         last = Pings.query.filter(and_(Pings.host == host, oneMinuteAgo < Pings.time_stamp )).all()
-        return len(last) > 0 and last[0].down
+        return len(last) > 0 and last[0].isdown
 
     @staticmethod
     def addPing(p):
