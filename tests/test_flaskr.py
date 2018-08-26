@@ -16,7 +16,6 @@ def client():
     app = flaskr.create_app(DATABASE_URI)
     app.app_context().push()
     client = app.test_client()
-    db = None
 
     with app.app_context():
         db = flaskr.init_db(app)

@@ -5,10 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from sqlalchemy.sql.expression import and_
 
-
 # from sqlalchemy.dialects import postgresql
 db = SQLAlchemy()
-
 
 class Pings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,8 +38,8 @@ class PingsRepository:
         :param n:
         :return: the last n pings
         '''
-        p = db.session.query(Pings.host, Pings.isdown, Pings.response_code, db.func.max(Pings.time_stamp).label("time_stamp"))\
-            .order_by(desc("time_stamp")).group_by(Pings.host, Pings.isdown, Pings.response_code).limit(10)
+        p = Pings.query(Pings.host, Pings.isdown, Pings.response_code, db.func.max(Pings.time_stamp).label("time_stamp"))\
+            .order_by(desc("time_stamp")).group_by(Pings.host, Pings.isdown, Pings.response_code).limit(n)
         return p.all()
 
 
