@@ -15,7 +15,7 @@ It's made with:
  * You should have Postresql and Python 3.6 installed.
  * Create a user and a database for isitdown.site, and import the isitdown.db file.
  * Give build.sh run permissions: `chmod +x build.sh`
- * Open a terminal, and run `./build.sh` to create the virtual environment and download the packets.
+ * Open a terminal, and run `./build.sh` to create the virtual environment and download the required packages.
  * Type `source .venv/bin/activate` to activate the virtual environment
  * Add the database connection uri as enviornment variable: `export DATABASE_URI=postgresql://username:password@localhost/database`. You can add a `PORT` variable to ovverride the default listening port (5000).
  * Finally, run `python3 index.py` to run the site.

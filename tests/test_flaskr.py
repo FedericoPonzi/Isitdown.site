@@ -14,13 +14,14 @@ def get_db():
 def client():
     DATABASE_URI = os.environ["DATABASE_URI"]
     app = flaskr.create_app(DATABASE_URI)
-    app.app_context().push()
     client = app.test_client()
-
-    with app.app_context():
-        db = flaskr.init_db(app)
     yield client
-    get_db().drop_all()
+
+    """ TODO:
+    with app.app_context():
+        from repository import db    
+        db.drop_all() # this gets stuck by a lock on the db.
+    """
 
 
 def test_json_api(client):

@@ -5,25 +5,28 @@ import requests
 from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
 from isitdown.repository import Pings, PingsRepository
+from repository import db
 
-
-db = SQLAlchemy()
 logger = None
 
 
 def init_db(app):
     db.init_app(app)
-    #with app.app_context():
-    #    db.create_all() #TODO: This is not working. I've investigated for a while but cannot figure out why.
+    with app.app_context():
+        db.create_all()
     return db
 
 
-def create_app(DATABASE_URI):
+def create_app(DATABASE_URI=None):
+    if type(DATABASE_URI) != str:
+        print("Error: Database URI is:" + str(DATABASE_URI))
+        return None
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = str(DATABASE_URI)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     #app.config['SQLALCHEMY_ECHO'] = True
-    init_db(app)
+    db = init_db(app)
     app.register_blueprint(bp)
 
     return app
@@ -57,7 +60,7 @@ def check(host=""):
 
 @bp.errorhandler(404)
 def page_not_found(error):
-    app.logger.error(error)
+    logger.error(error)
     return render_template('404.html'), 404
 
 
@@ -93,8 +96,10 @@ def doPing(host, prefix="https://"):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app = create_app(DATABASE_URI = os.environ["DATABASE_URI"])
-    app.run(host='0.0.0.0', port=port)
+    if "DATABASE_URI" not in os.environ:
+        print("Error: missing DATABASE_URI environment variable.")
+        import sys
+        sys.exit(-1)
+    app = create_app(DATABASE_URI=os.environ["DATABASE_URI"])
     logger = app.logger
-
-
+    app.run(host='0.0.0.0', port=port)

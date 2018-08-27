@@ -8,6 +8,7 @@ from sqlalchemy.sql.expression import and_
 # from sqlalchemy.dialects import postgresql
 db = SQLAlchemy()
 
+
 class Pings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     from_ip = db.Column(db.String(120))
@@ -28,7 +29,6 @@ class Pings(db.Model):
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, down=%r)' % (self.id, self.f, self.t, self.at, self.down)
 
-
 class PingsRepository:
     """ Repository class for the Pings table. Used to do queries against the database."""
 
@@ -38,7 +38,7 @@ class PingsRepository:
         :param n:
         :return: the last n pings
         '''
-        p = Pings.query(Pings.host, Pings.isdown, Pings.response_code, db.func.max(Pings.time_stamp).label("time_stamp"))\
+        p = db.session.query(Pings.host, Pings.isdown, Pings.response_code, db.func.max(Pings.time_stamp).label("time_stamp"))\
             .order_by(desc("time_stamp")).group_by(Pings.host, Pings.isdown, Pings.response_code).limit(n)
         return p.all()
 
