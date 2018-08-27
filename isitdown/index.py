@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
-from .repository import Pings, PingsRepository, db
+from isitdown.repository import Pings, PingsRepository, db
 
 logger = None
 
