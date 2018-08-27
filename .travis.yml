@@ -4,12 +4,13 @@ python:
 services:
   - postgresql
 install:
-  - pip install codecov
+  - pip install codecov pytest-cov
+  - pip install -r requirements.txt
 before_script:
   - psql -c 'create database test_isitdown;' -U postgres
 env:
   - DATABASE_URI=postgresql://postgres:postgres@127.0.0.1/test_isitdown
 script:
-  - python -m pytest
+  - python -m pytest --cov=./
 after_success:
   - codecov
