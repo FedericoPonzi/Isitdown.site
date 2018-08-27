@@ -1,5 +1,5 @@
 # Isitdown.site
-<a href="https://travis-ci.org/FedericoPonzi/Isitdown.site"><img src="https://api.travis-ci.org/FedericoPonzi/Isitdown.site.svg?branch=master"></a>
+[![Build Status](https://travis-ci.org/FedericoPonzi/Isitdown.site.svg?branch=master)](https://travis-ci.org/FedericoPonzi/Isitdown.site)
 
 This is the source code for [isitdown.site](http://isitdown.site)
 
