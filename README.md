@@ -1,5 +1,6 @@
 # Isitdown.site
 [![Build Status](https://travis-ci.org/FedericoPonzi/Isitdown.site.svg?branch=master)](https://travis-ci.org/FedericoPonzi/Isitdown.site)
+[![codecov](https://codecov.io/gh/FedericoPonzi/Isitdown.site/branch/master/graph/badge.svg)](https://codecov.io/gh/FedericoPonzi/Isitdown.site)
 
 This is the source code for [isitdown.site](http://isitdown.site)
 
