@@ -3,9 +3,13 @@ python:
   - "3.5"
 services:
   - postgresql
+install:
+  - pip install --user codecov
 before_script:
   - psql -c 'create database test_isitdown;' -U postgres
 env:
   - DATABASE_URI=postgresql://postgres:postgres@127.0.0.1/test_isitdown
 script:
   - python -m pytest
+after_success:
+  - codecov
