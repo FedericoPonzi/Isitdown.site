@@ -4,7 +4,7 @@ python:
 services:
   - postgresql
 install:
-  - pip install --user codecov
+  - pip install codecov
 before_script:
   - psql -c 'create database test_isitdown;' -U postgres
 env:
