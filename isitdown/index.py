@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 import requests
 from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
-from flask_sqlalchemy import SQLAlchemy
 from isitdown.repository import Pings, PingsRepository, db
 
 logger = None
@@ -31,7 +30,7 @@ def create_app(DATABASE_URI=None):
     return app
 
 
-bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
+bp = Blueprint('index', __name__, static_folder="isitdown/static", template_folder="isitdown/templates")
 
 
 @bp.route("/api/<string:host>")
