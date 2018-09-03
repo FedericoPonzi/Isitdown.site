@@ -35,7 +35,7 @@ bp = Blueprint('index', __name__, static_folder="isitdown/static", template_fold
 
 @bp.route("/api/<string:host>")
 def jsonCheck(host=""):
-    return jsonify(isitdown=doPing(host))
+    return jsonify(isitdown=PingsRepository.wasDownOneMinuteAgo(host) and doPing(host))
 
 
 # Some static files:
@@ -53,7 +53,7 @@ def check(host=""):
     lastPingList = PingsRepository.getLastPings()
     if len(host) == 0:
         return render_template("index.html", last=lastPingList)
-    return render_template("check.html", pingres=PingsRepository.isLastPingSuccessfull(host) or doPing(host), host=host, last=lastPingList)
+    return render_template("check.html", pingres=PingsRepository.wasDownOneMinuteAgo(host) and doPing(host), host=host, last=lastPingList)
 
 
 @bp.errorhandler(404)
