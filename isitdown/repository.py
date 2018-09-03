@@ -53,9 +53,7 @@ class PingsRepository:
             False, otherwise.
         """
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
-        print(host, oneMinuteAgo)
         last = Pings.query.filter(and_(Pings.host == host, oneMinuteAgo < Pings.time_stamp)).all()
-        print(last)
         return len(last) > 0 and last[0].isdown
 
     @staticmethod
