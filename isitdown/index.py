@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 from datetime import datetime
 import requests
 from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
@@ -35,6 +36,8 @@ bp = Blueprint('index', __name__, static_folder="isitdown/static", template_fold
 
 @bp.route("/api/<string:host>")
 def jsonCheck(host=""):
+    if not isValidHost(host):
+        return jsonify(isitdown=False)
     return jsonify(isitdown=PingsRepository.wasDownOneMinuteAgo(host) and doPing(host))
 
 
@@ -45,6 +48,12 @@ def jsonCheck(host=""):
 @bp.route("/humans.txt")
 def getRobots():
     return send_from_directory(bp.static_folder, request.path[1:])
+
+
+def isValidHost(host):
+    regex = r"(http:\/\/)*(https:\/\/)*([a-zA-Z]+\.)+([a-zA-Z])+"
+    pattern = re.compile(regex)
+    return pattern.match(host)
 
 
 @bp.route("/")
@@ -66,6 +75,9 @@ def doPing(host, prefix="https://"):
     '''
     @:returns true, if host is down
     '''
+    if not isValidHost(host):
+        return True
+
     httpHost = prefix + host
     isDown = True
     response_code = -1
