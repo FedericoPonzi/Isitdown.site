@@ -66,13 +66,13 @@
                             <h2>About</h2>
                             <p>With this site you can easily check if a site is down or if you have one of the following most common problems:
                                 <ul>
-                                    <li><strong>Browser problem:</strong> Try clearing your browser cache. Hit ctrl+shift+r.<br>Also, you can try to disable your ad-blocker and refresh the page.</li>
-                                    <li><strong>Router's problem:</strong> Restart your router.</li>
-                                    <li><strong>DNS Problem:</strong> It may happen that your host blocks that domain.<br>Try to use an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a>.</li>
+                                    <li><strong>Browser problem:</strong> Try clearing your browser cache. Hit <code>ctrl+shift+r</code>.<br>You can also try to disable your ad-blocker and refresh the page.</li>
+                                    <li><strong>Router's problem:</strong> Restart your router. Turn it off, wait 15 seconds, and turn it on again.</li>
+                                    <li><strong>DNS Problem:</strong> It may happen that your ISP blocks that domain.<br>Using an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a> may help.</li>
                                 </ul>
                             </p>
                             <h3>How does it work?</h3>
-                            <p>Isitdown.site will try to connect to port 80 on the address requested and report the request result. The site will appear as online, even if it returns a bad response.</p> 
+                            <p>It will send an HEAD request on both HTTP (port 80) and HTTPS (port 463) of the requested host. The site will appear as online, even if it returns a bad response. The server is located in Germany.</p>
                         </section>
                     </div>
                     <div class="col-xs-12 col-s-12 col-md-4 col-lg-4">
