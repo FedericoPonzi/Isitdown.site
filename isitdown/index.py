@@ -51,7 +51,7 @@ def getRobots():
 
 
 def isValidHost(host):
-    regex = r"(http:\/\/)*(https:\/\/)*([a-zA-Z]+\.)+([a-zA-Z])+"
+    regex = r"(http:\/\/)*(https:\/\/)*([a-zA-Z1-9-]+\.)+([a-zA-Z1-9])+"
     pattern = re.compile(regex)
     return pattern.match(host)
 
