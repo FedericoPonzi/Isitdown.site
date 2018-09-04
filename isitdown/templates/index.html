@@ -54,6 +54,8 @@
                                         </a>
                                         {% with pingtime=el.time_stamp.strftime("%Y-%m-%d %I.%M %p") %}
                                         <span class="checktime">{{ pingtime }}</span>
+                                        {% if el.response_code != -1 %} |  <span class="response_code">{{ el.response_code }}</span> {% endif %}
+
                                         {% endwith %}
                                     </td>
                                 </tr>
