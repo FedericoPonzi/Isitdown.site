@@ -55,8 +55,8 @@ class PingsRepository:
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
         last = Pings.query.filter(and_(Pings.host == host, oneMinuteAgo < Pings.time_stamp)).all()
         if len(last) > 0:
-            return last[0].isdown
-        return True # We have no informations
+            return last[0]
+        return Pings(host=host, isdown=True, response_code="-1") # We have no informations, so assume was down.
 
     @staticmethod
     def addPing(p):

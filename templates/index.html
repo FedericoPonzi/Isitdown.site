@@ -54,7 +54,7 @@
                                         </a>
                                         {% with pingtime=el.time_stamp.strftime("%Y-%m-%d %I.%M %p") %}
                                         <span class="checktime">{{ pingtime }}</span>
-                                        {% if el.response_code != -1 %} |  <span class="response_code">{{ el.response_code }}</span> {% endif %}
+                                        {% if el.response_code != -1 %} | Response: <span class="response_code"> {{ el.response_code }}</span> {% endif %}
 
                                         {% endwith %}
                                     </td>
@@ -81,7 +81,7 @@
                         <section class="card cline">
                             <h2>Command line lover?</h2>
                             <p>Check if a site is down via command line, as simple as this:</p>
-                            <code>curl https://isitdown.site/api/google.com</code>
+                            <code>curl https://isitdown.site/api/v2/google.com</code>
                         </section>
                         <section class="card features">
                             <h2>Found a bug?<br>Want a new feature?</h2>

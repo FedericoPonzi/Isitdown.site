@@ -25,7 +25,7 @@ def client():
 
 
 def test_json_api(client):
-    resp = client.get('/api/google.it')
+    resp = client.get('/api/v2/google.it')
     json_data = resp.get_json()
     assert json_data is not None
     assert json_data['isitdown'] is False
