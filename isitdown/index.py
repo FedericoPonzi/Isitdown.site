@@ -31,15 +31,17 @@ def create_app(DATABASE_URI=None):
     return app
 
 
-bp = Blueprint('index', __name__, static_folder="isitdown/static", template_folder="isitdown/templates")
+bp = Blueprint('index', __name__, static_folder="static", template_folder="../templates")
 
 
-@bp.route("/api/<string:host>")
+@bp.route("/api/v2/<string:host>")
 def jsonCheck(host=""):
     if not isValidHost(host):
         return jsonify(isitdown=False)
-    return jsonify(isitdown=PingsRepository.wasDownOneMinuteAgo(host) and doPing(host))
-
+    p = PingsRepository.wasDownOneMinuteAgo(host)
+    if p.isdown:
+        p = doPing(host)
+    return jsonify(isitdown=p.isdown, response_code=p.response_code)
 
 # Some static files:
 @bp.route("/favicon.ico")
@@ -62,7 +64,10 @@ def check(host=""):
     lastPingList = PingsRepository.getLastPings()
     if len(host) == 0:
         return render_template("index.html", last=lastPingList)
-    return render_template("check.html", pingres=PingsRepository.wasDownOneMinuteAgo(host) and doPing(host), host=host, last=lastPingList)
+    p = PingsRepository.wasDownOneMinuteAgo(host)
+    if p.isdown:
+        p = doPing(host)
+    return render_template("check.html", last=lastPingList, pingres=p)
 
 
 @bp.errorhandler(404)
@@ -73,10 +78,10 @@ def page_not_found(error):
 
 def doPing(host, prefix="https://"):
     '''
-    @:returns true, if host is down
+    @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
     '''
     if not isValidHost(host):
-        return True
+        return Pings(host= host, isdown=True)
 
     httpHost = prefix + host
     isDown = True
@@ -89,8 +94,9 @@ def doPing(host, prefix="https://"):
         isDown = False
         response_code = resp.status_code
     except Exception as e:
-        if "Name or service not known" in repr(e):
-            return True
+        if "Name or service not known" in repr(e): # TODO: Probably a more informative message would be better.
+            return Pings(host=host, isdown=True)
+
         current_app.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
 
         # Check both https and http:
@@ -99,15 +105,16 @@ def doPing(host, prefix="https://"):
 
     # ip_addr = socket.gethostbyname(host) uh-uh
 
-    p = Pings(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=isDown, response_code=response_code)
+    p = Pings(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=isDown,
+              response_code=response_code)
     PingsRepository.addPing(p)
-    return isDown
+    return p
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     if "DATABASE_URI" not in os.environ:
-        print("Error: missing DATABASE_URI environment variable.")
+        print("Fatal: missing DATABASE_URI environment variable.")
         import sys
         sys.exit(-1)
     app = create_app(DATABASE_URI=os.environ["DATABASE_URI"])
