@@ -53,8 +53,10 @@ def getRobots():
 
 
 def isValidHost(host):
-    regex = r"(http:\/\/)*(https:\/\/)*([a-zA-Z1-9-]+\.)+([a-zA-Z1-9])+"
+    regex = r"(http:\/\/)*(https:\/\/)*([a-zA-Z0-9-]+\.)+([a-zA-Z1-9])+"
     pattern = re.compile(regex)
+    if not pattern.match(host):
+        logger.error("Regex for site: " + host +" not passed.")
     return pattern.match(host)
 
 
@@ -81,6 +83,7 @@ def doPing(host, prefix="https://"):
     @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
     '''
     if not isValidHost(host):
+        current_app.logger.debug("Error validating host.")
         return Pings(host= host, isdown=True)
 
     httpHost = prefix + host
