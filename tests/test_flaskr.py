@@ -4,6 +4,7 @@ import pytest
 from flask import current_app, g
 import isitdown.index as flaskr
 
+
 def get_db():
     if 'db' not in g:
         g.db = flaskr.init_db(current_app)

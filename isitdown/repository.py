@@ -29,6 +29,7 @@ class Pings(db.Model):
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, isdown=%r, response=%dr)' % (self.id, self.from_ip, self.host, self.time_stamp, self.isdown, self.response_code)
 
+
 class PingsRepository:
     """ Repository class for the Pings table. Used to do queries against the database."""
 
