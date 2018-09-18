@@ -43,6 +43,7 @@ def jsonCheck(host=""):
         p = doPing(host)
     return jsonify(isitdown=p.isdown, response_code=p.response_code)
 
+
 # Some static files:
 @bp.route("/favicon.ico")
 @bp.route("/robots.txt")
@@ -74,7 +75,7 @@ def check(host=""):
 
 @bp.errorhandler(404)
 def page_not_found(error):
-    logger.error(error)
+    current_app.logger.error(error)
     return render_template('404.html'), 404
 
 
@@ -90,9 +91,11 @@ def doPing(host, prefix="https://"):
     isDown = True
     response_code = -1
     current_app.logger.debug("Sending head request to:" + httpHost)
-
+    headers = {
+        'User-Agent': 'isitdown.site(Check if a site is down)',
+    }
     try:
-        resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True)
+        resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True, headers=headers)
         # If we come here, we had a response. So the site is up:
         isDown = False
         response_code = resp.status_code
