@@ -128,6 +128,16 @@ form {
     border-bottom-color: #ff5c5c;
 }
 
+.main h2 .response_code {
+    border: 1px dotted white; color: white;
+}
+.main h2 .response_code:hover {
+    text-decoration: none !important;
+    border: 1px solid white;
+    background-color: white;
+    color: black !important;
+}
+
 #host {
     padding: 9px;
     width: 250px;
