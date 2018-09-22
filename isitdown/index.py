@@ -78,6 +78,9 @@ def page_not_found(error):
     current_app.logger.error(error)
     return render_template('404.html'), 404
 
+@bp.route("/users")
+def users():
+    return render_template('users/login.html')
 
 def doPing(host, prefix="https://"):
     '''

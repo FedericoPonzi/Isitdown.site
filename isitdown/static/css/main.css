@@ -53,18 +53,12 @@ body {
 }
 
 .card {
-    margin: 25px auto;
-    padding: 20px 10px;
-    background-color: white;
+    margin-bottom: 25px;
     color: black;
-    width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.34);
-    color: black;
-    border-radius: 4px;
 }
 
-.card:first-child h2 {
-    padding-bottom: 40px;
+.card-title{
+    margin-bottom: 1.75rem;
 }
 
 .main {
@@ -72,11 +66,10 @@ body {
     text-align: center;
     min-width: 100%;
     align-self: center;
-    flex: 1 0 auto;
     padding-bottom: 3em;
     background-color: #293B4D;
     border-bottom: 1px solid black;
-
+    margin-bottom: 25px;
 }
 
 h1 {
@@ -212,10 +205,6 @@ footer a:hover {
     padding-top: 0px;
 }
 
-.about {
-    align-self: center;
-    text-align: center;
-}
 
 .about ul {
     text-align: justify;
@@ -232,20 +221,6 @@ code {
     word-wrap: break-word;
 }
 
-.flex-row {
-    display: -webkit-box;
-    flex-wrap: wrap;
-}
-
-.flex-row > [class*='col-'] {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-row.row:after,
-.flex-row.row:before {
-    display: flex;
-}
 
 @media only screen and (max-width: 1024px) {
     .flex-row {
@@ -253,41 +228,11 @@ code {
     }
 }
 
-.card {
-    /*  width:100%;
-      margin:auto;
-      margin-top: 30px;
-      */
-    flex: 1 0 auto;
+.card ul li {
+    padding-bottom: 20px;
 }
-
-/*.card:not(.cline){
-  margin-bottom:15px;
-}*/
-
-.card ul li, .hostList {
-    font-size: 1.1em;
-    margin-bottom: 20px;
-}
-
-.lastConnections table, .about div {
-    margin: 40px auto 0px auto;
-}
-
-.cline p, .features p {
-    margin-top: 55px;
-}
-
-td {
-    word-break: break-all;
-    padding-bottom: 10px;
-}
-
-td a {
-    display: block;
-    text-decoration: none;
-    border-bottom: 0px !important;
-
+.card-body {
+    margin-bottom: 1rem;
 }
 
 .checktime {
@@ -296,8 +241,8 @@ td a {
     font-size: 0.8em;
 }
 
-p {
-    font-size: 1.4em;
+p, li {
+    font-size: 1.1em;
 }
 
 form {
