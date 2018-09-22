@@ -52,9 +52,9 @@
                                                 <span class="hostList {% if el.isdown %}hostDown{% else %}hostUp{% endif %}">{{ el.host }}</span>
                                             </a><br />
                                             {% with pingtime=el.time_stamp.strftime("%Y-%m-%d %I.%M %p") %}
-                                            <span class="checktime">{{ pingtime }}</span>
-                                            {% if el.response_code != -1 %} | Response: <span class="checktime"> {{ el.response_code }}</span> {% endif %}
-
+                                            <span class="checktime">{{ pingtime }}
+                                            {% if el.response_code != -1 %} | Response: {{ el.response_code }} {% endif %}
+                                            </span>
                                             {% endwith %}
                                           </li>
                                     {% endfor %}
