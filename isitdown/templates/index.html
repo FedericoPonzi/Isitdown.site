@@ -8,13 +8,13 @@
         <meta name="description" content="Check if a site is down, or if you have connection problem.">
         {% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
-        <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32" />
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16" />
+        <link rel="stylesheet" href="{{ url_for('index.static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('index.static', filename='css/normalize.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('index.static', filename='css/main.css') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('index.static', filename='favicon.ico') }}"/>
+        <link rel="apple-touch-icon" href="{{ url_for('index.static', filename='apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" href="{{ url_for('index.static', filename='favicon-32x32.png') }}" sizes="32x32" />
+        <link rel="icon" type="image/png" href="{{ url_for('index.static', filename='favicon-16x16.png') }}" sizes="16x16" />
         <meta property="og:type" content="website">
         <meta property="og:title" content="Is it down? Check if a site is down">
         <meta property="og:description" content="Check if a site is really down and find out if you have a connection problem.">
@@ -24,13 +24,13 @@
         <link href="https://fonts.googleapis.com/css?family=Open%20Sans|Roboto" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script>window.html5 || document.write('<script src="{{ url_for('static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
+        <script>window.html5 || document.write('<script src="{{ url_for('index.static', filename='js/vendor/html5shiv.js') }}"><\/script>')</script>
             <![endif]-->
 
         </head>
         <body>
             <section class="main">
-                <a href="/" title="is it down?"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
+                <a href="/" title="is it down?"><img src="{{ url_for('index.static', filename='img/logo.png') }}" alt="logo" class="logo"></a>
                 <h1>IS IT DOWN?</h1>
                 <form>
                     <input id="host" type="text" value="{{ host }}" placeholder="google.it">

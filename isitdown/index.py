@@ -31,7 +31,7 @@ def create_app(DATABASE_URI=None):
     return app
 
 
-bp = Blueprint('index', __name__, static_folder="static", template_folder="../templates")
+bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
 
 
 @bp.route("/api/v2/<string:host>")
