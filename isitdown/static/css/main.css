@@ -191,12 +191,12 @@ footer a:hover {
     font-weight: bold;
 }
 
-.card a {
+.card-text a {
     color: black;
     border-bottom: 1px dotted black;
 }
 
-.card a:hover {
+.card-text a:hover {
     border-bottom: 1px solid black;
     font-weight: bold;
 }
