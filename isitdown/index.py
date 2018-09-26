@@ -6,9 +6,6 @@ import requests
 from flask import Flask, render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 from isitdown.repository import Pings, PingsRepository, db
 
-logger = None
-
-
 def init_db(app):
     db.init_app(app)
     with app.app_context():
@@ -57,7 +54,7 @@ def isValidHost(host):
     regex = r"((http:\/\/)|(https:\/\/)){0,1}([a-zA-Z0-9-]+\.)+([a-zA-Z])+"
     pattern = re.compile(regex)
     if not pattern.match(host):
-        logger.error("Regex for site: " + host +" not passed.")
+        current_app.logger.error("Regex for site: " + host +" not passed.")
     return pattern.match(host)
 
 
@@ -127,5 +124,4 @@ if __name__ == "__main__":
         import sys
         sys.exit(-1)
     app = create_app(DATABASE_URI=os.environ["DATABASE_URI"])
-    logger = app.logger
     app.run(host='0.0.0.0', port=port)
