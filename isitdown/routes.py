@@ -16,7 +16,7 @@ def apiv2(host=""):
         return jsonify(isitdown=False)
     ping = PingRepository.wasDownOneMinuteAgo(host)
     if ping.isdown:
-        ping = do_ping(host, from_api=True)
+        ping = do_ping(host, from_api=1)
     return jsonify(isitdown=ping.isdown, response_code=ping.response_code)
 
 
@@ -26,7 +26,7 @@ def apiv3(host=""):
         return jsonify(isitdown=False)
     ping = PingRepository.wasDownOneMinuteAgo(host)
     if ping.isdown:
-        ping = do_ping(host, from_api=True)
+        ping = do_ping(host, from_api=1)
     return jsonify(isitdown=ping.isdown, response_code=ping.response_code, host=host, deprecated=False)
 
 
@@ -65,7 +65,7 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-def do_ping(host, prefix="https://", from_api=False):
+def do_ping(host, prefix="https://", from_api=0):
     '''
     @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
     '''

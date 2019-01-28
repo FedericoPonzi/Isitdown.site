@@ -51,7 +51,7 @@
                                             <a href="/{{ el.host }}" title="{{ el.host }}" rel="nofollow">
                                                 <span class="hostList {% if el.isdown %}hostDown{% else %}hostUp{% endif %}">{{ el.host }}</span>
                                             </a><br />
-                                            {% with pingtime=el.time_stamp.strftime("%Y-%m-%d %I.%M %p") %}
+                                            {% with pingtime=el.timestamp.strftime("%Y-%m-%d %I.%M %p") %}
                                             <span class="checktime">{{ pingtime }}
                                             {% if el.response_code != -1 %} | Response: {{ el.response_code }} {% endif %}
                                             </span>

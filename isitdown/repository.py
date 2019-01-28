@@ -29,7 +29,7 @@ class PingRepository:
             False, otherwise.
         """
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
-        last = Ping.query.filter(and_(Ping.host == host, oneMinuteAgo < Ping.time_stamp)).all()
+        last = Ping.query.filter(and_(Ping.host == host, oneMinuteAgo < Ping.timestamp)).all()
         if len(last) > 0:
             return last[0]
         return Ping(host=host, isdown=True, response_code="-1") # We have no informations, so assume was down.
