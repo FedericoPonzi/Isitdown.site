@@ -1,12 +1,7 @@
 from datetime import datetime, timedelta
-
-from flask import current_app
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from sqlalchemy.sql.expression import and_
-
-# from sqlalchemy.dialects import postgresql
-db = SQLAlchemy()
+from .index import db
 
 
 class Pings(db.Model):
