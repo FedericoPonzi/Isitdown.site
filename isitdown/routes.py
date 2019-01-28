@@ -5,19 +5,29 @@ from datetime import datetime
 import requests
 from flask import render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 
-from isitdown.repository import Pings, PingsRepository
+from isitdown.repository import Ping, PingRepository
 
 frontend_bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
 
 
 @frontend_bp.route("/api/v2/<string:host>")
-def json_check(host=""):
+def apiv2(host=""):
     if not is_valid_host(host):
         return jsonify(isitdown=False)
-    p = PingsRepository.wasDownOneMinuteAgo(host)
-    if p.isdown:
-        p = do_ping(host)
-    return jsonify(isitdown=p.isdown, response_code=p.response_code)
+    ping = PingRepository.wasDownOneMinuteAgo(host)
+    if ping.isdown:
+        ping = do_ping(host, from_api=True)
+    return jsonify(isitdown=ping.isdown, response_code=ping.response_code)
+
+
+@frontend_bp.route("/api/v3/<string:host>")
+def apiv3(host=""):
+    if not is_valid_host(host):
+        return jsonify(isitdown=False)
+    ping = PingRepository.wasDownOneMinuteAgo(host)
+    if ping.isdown:
+        ping = do_ping(host, from_api=True)
+    return jsonify(isitdown=ping.isdown, response_code=ping.response_code, host=host, deprecated=False)
 
 
 # Some static files:
@@ -40,13 +50,13 @@ def is_valid_host(host):
 @frontend_bp.route("/")
 @frontend_bp.route("/<string:host>")
 def check(host=""):
-    lastPingList = PingsRepository.getLastPings()
+    last_ping_list = PingRepository.getLastPings()
     if len(host) == 0:
-        return render_template("index.html", last=lastPingList)
-    p = PingsRepository.wasDownOneMinuteAgo(host)
-    if p.isdown:
-        p = do_ping(host)
-    return render_template("check.html", last=lastPingList, pingres=p)
+        return render_template("index.html", last=last_ping_list)
+    ping = PingRepository.wasDownOneMinuteAgo(host)
+    if ping.isdown:
+        ping = do_ping(host)
+    return render_template("check.html", last=last_ping_list, pingres=ping)
 
 
 @frontend_bp.errorhandler(404)
@@ -55,39 +65,41 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-def do_ping(host, prefix="https://"):
+def do_ping(host, prefix="https://", from_api=False):
     '''
     @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
     '''
     if not is_valid_host(host):
         current_app.logger.debug("Error validating host.")
-        return Pings(host= host, isdown=True)
+        return Ping(host=host, isdown=True)
 
-    httpHost = prefix + host
-    isDown = True
+    http_host = prefix + host
+    is_down = True
     response_code = -1
-    current_app.logger.debug("Sending head request to:" + httpHost)
+    current_app.logger.debug("Sending head request to:" + http_host)
     headers = {
         'User-Agent': 'isitdown.site(Check if a site is down)',
     }
     try:
-        resp = requests.head(httpHost, timeout=2, stream=True, allow_redirects=True, headers=headers)
+        resp = requests.head(http_host, timeout=2, stream=True, allow_redirects=True, headers=headers)
         # If we come here, we had a response. So the site is up:
-        isDown = False
+        is_down = False
         response_code = resp.status_code
     except Exception as e:
         if "Name or service not known" in repr(e): # TODO: Probably a more informative message would be better.
-            return Pings(host=host, isdown=True)
+            return Ping(host=host, isdown=True)
 
         current_app.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
 
         # Check both https and http:
-        if "Connection refused" in repr(e):
-            return do_ping(host, "http://")
+        if "Connection refused" in repr(e) and prefix == "https://":
+            return do_ping(host, prefix="http://", from_api=from_api)
 
     # ip_addr = socket.gethostbyname(host) uh-uh
 
-    p = Pings(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=isDown,
-              response_code=response_code)
-    PingsRepository.addPing(p)
+    p = Ping(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=is_down,
+             response_code=response_code, from_api=from_api)
+
+    PingRepository.addPing(p)
+
     return p

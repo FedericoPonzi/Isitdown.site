@@ -15,7 +15,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
 
     from .routes import frontend_bp
     app.register_blueprint(frontend_bp)
