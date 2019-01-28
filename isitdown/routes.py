@@ -6,9 +6,11 @@ import requests
 from flask import render_template, request, Markup, jsonify, send_from_directory, Blueprint, current_app
 
 from isitdown.repository import Ping, PingRepository
+import os
 
-frontend_bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
+basedir = os.path.abspath(os.path.dirname(__file__))
 
+frontend_bp = Blueprint('index', __name__, static_folder=os.path.join(basedir, "static"), template_folder="templates")
 
 @frontend_bp.route("/api/v2/<string:host>")
 def apiv2(host=""):
