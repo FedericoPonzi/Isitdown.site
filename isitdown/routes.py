@@ -10,7 +10,7 @@ from isitdown.repository import Pings, PingsRepository
 frontend_bp = Blueprint('index', __name__, static_folder="static", template_folder="templates")
 
 
-@bp.route("/api/v2/<string:host>")
+@frontend_bp.route("/api/v2/<string:host>")
 def jsonCheck(host=""):
     if not isValidHost(host):
         return jsonify(isitdown=False)
@@ -21,12 +21,12 @@ def jsonCheck(host=""):
 
 
 # Some static files:
-@bp.route("/favicon.ico")
-@bp.route("/robots.txt")
-@bp.route("/sitemap.xml")
-@bp.route("/humans.txt")
+@frontend_bp.route("/favicon.ico")
+@frontend_bp.route("/robots.txt")
+@frontend_bp.route("/sitemap.xml")
+@frontend_bp.route("/humans.txt")
 def getRobots():
-    return send_from_directory(bp.static_folder, request.path[1:])
+    return send_from_directory(frontend_bp.static_folder, request.path[1:])
 
 
 def isValidHost(host):
@@ -37,8 +37,8 @@ def isValidHost(host):
     return pattern.match(host)
 
 
-@bp.route("/")
-@bp.route("/<string:host>")
+@frontend_bp.route("/")
+@frontend_bp.route("/<string:host>")
 def check(host=""):
     lastPingList = PingsRepository.getLastPings()
     if len(host) == 0:
@@ -49,14 +49,16 @@ def check(host=""):
     return render_template("check.html", last=lastPingList, pingres=p)
 
 
-@bp.errorhandler(404)
+@frontend_bp.errorhandler(404)
 def page_not_found(error):
     current_app.logger.error(error)
     return render_template('404.html'), 404
 
-@bp.route("/users")
+
+@frontend_bp.route("/users")
 def users():
     return render_template('users/login.html')
+
 
 def doPing(host, prefix="https://"):
     '''
