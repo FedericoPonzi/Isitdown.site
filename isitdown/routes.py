@@ -11,12 +11,12 @@ frontend_bp = Blueprint('index', __name__, static_folder="static", template_fold
 
 
 @frontend_bp.route("/api/v2/<string:host>")
-def jsonCheck(host=""):
-    if not isValidHost(host):
+def json_check(host=""):
+    if not is_valid_host(host):
         return jsonify(isitdown=False)
     p = PingsRepository.wasDownOneMinuteAgo(host)
     if p.isdown:
-        p = doPing(host)
+        p = do_ping(host)
     return jsonify(isitdown=p.isdown, response_code=p.response_code)
 
 
@@ -25,11 +25,11 @@ def jsonCheck(host=""):
 @frontend_bp.route("/robots.txt")
 @frontend_bp.route("/sitemap.xml")
 @frontend_bp.route("/humans.txt")
-def getRobots():
+def get_robots():
     return send_from_directory(frontend_bp.static_folder, request.path[1:])
 
 
-def isValidHost(host):
+def is_valid_host(host):
     regex = r"((http:\/\/)|(https:\/\/)){0,1}([a-zA-Z0-9-]+\.)+([a-zA-Z])+"
     pattern = re.compile(regex)
     if not pattern.match(host):
@@ -45,7 +45,7 @@ def check(host=""):
         return render_template("index.html", last=lastPingList)
     p = PingsRepository.wasDownOneMinuteAgo(host)
     if p.isdown:
-        p = doPing(host)
+        p = do_ping(host)
     return render_template("check.html", last=lastPingList, pingres=p)
 
 
@@ -55,16 +55,11 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-@frontend_bp.route("/users")
-def users():
-    return render_template('users/login.html')
-
-
-def doPing(host, prefix="https://"):
+def do_ping(host, prefix="https://"):
     '''
     @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
     '''
-    if not isValidHost(host):
+    if not is_valid_host(host):
         current_app.logger.debug("Error validating host.")
         return Pings(host= host, isdown=True)
 
@@ -88,7 +83,7 @@ def doPing(host, prefix="https://"):
 
         # Check both https and http:
         if "Connection refused" in repr(e):
-            return doPing(host, "http://")
+            return do_ping(host, "http://")
 
     # ip_addr = socket.gethostbyname(host) uh-uh
 
