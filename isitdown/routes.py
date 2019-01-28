@@ -97,7 +97,7 @@ def do_ping(host, prefix="https://", from_api=False):
 
     # ip_addr = socket.gethostbyname(host) uh-uh
 
-    p = Ping(from_ip=request.access_route[-1], host=Markup(host),time_stamp=datetime.utcnow(), isdown=is_down,
+    p = Ping(from_ip=request.access_route[-1], host=Markup(host),timestamp=datetime.utcnow(), isdown=is_down,
              response_code=response_code, from_api=from_api)
 
     PingRepository.addPing(p)

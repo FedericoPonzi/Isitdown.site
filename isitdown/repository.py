@@ -14,8 +14,8 @@ class PingRepository:
         :param n:
         :return: the last n pings
         '''
-        p = db.session.query(Ping.host, Ping.isdown, Ping.response_code, db.func.max(Ping.time_stamp).label("time_stamp"))\
-            .order_by(desc("time_stamp")).group_by(Ping.host, Ping.isdown, Ping.response_code).limit(n)
+        p = db.session.query(Ping.host, Ping.isdown, Ping.response_code, db.func.max(Ping.timestamp).label("timestamp"))\
+            .order_by(desc("timestamp")).group_by(Ping.host, Ping.isdown, Ping.response_code).limit(n)
         return p.all()
 
 
