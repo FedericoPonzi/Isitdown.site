@@ -9,13 +9,17 @@ class PingRepository:
     """ Repository class for the Ping table. Used to do queries against the database."""
 
     @staticmethod
-    def getLastPings(n=10):
+    def getLastPings(n=10, request_source=0):
         '''
-        :param n:
+        :param n: number of last pings to get
+        :param request_source: select the source of the last pings. -1 for every request source
         :return: the last n pings
         '''
         p = db.session.query(Ping.host, Ping.isdown, Ping.response_code, db.func.max(Ping.timestamp).label("timestamp"))\
-            .order_by(desc("timestamp")).group_by(Ping.host, Ping.isdown, Ping.response_code).limit(n)
+            .order_by(desc("timestamp"))
+        if request_source >= 0:
+            p = p.filter(Ping.from_api == request_source)
+        p = p.group_by(Ping.host, Ping.isdown, Ping.response_code).limit(n)
         return p.all()
 
 

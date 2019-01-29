@@ -12,6 +12,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 frontend_bp = Blueprint('index', __name__, static_folder=os.path.join(basedir, "static"), template_folder="templates")
 
+
 @frontend_bp.route("/api/v2/<string:host>")
 def apiv2(host=""):
     if not is_valid_host(host):
@@ -52,7 +53,7 @@ def is_valid_host(host):
 @frontend_bp.route("/")
 @frontend_bp.route("/<string:host>")
 def check(host=""):
-    last_ping_list = PingRepository.getLastPings()
+    last_ping_list = PingRepository.getLastPings(request_source=0)
     if len(host) == 0:
         return render_template("index.html", last=last_ping_list)
     ping = PingRepository.wasDownOneMinuteAgo(host)
