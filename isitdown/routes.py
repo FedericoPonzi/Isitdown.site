@@ -70,7 +70,7 @@ def page_not_found(error):
 
 def do_ping(host, prefix="https://", from_api=0):
     '''
-    @:returns p, the result of the ping. It may return a boolean (True) if there are some validation errors.
+    @:returns a Ping(), with the result of the ping. It may or may not have been saved on the database.
     '''
     if not is_valid_host(host):
         current_app.logger.debug("Error validating host.")
