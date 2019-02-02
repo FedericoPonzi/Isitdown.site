@@ -121,10 +121,14 @@ form {
     border-bottom-color: #ff5c5c;
 }
 
-.main h2 .response_code {
-    border: 1px dotted white; color: white;
+.response_code {
+    border: 1px dotted white;
+    color: #50ff3b;
 }
-.main h2 .response_code:hover {
+.response_warn {
+    color: #ffc107;
+}
+.response_code:hover {
     text-decoration: none !important;
     border: 1px solid white;
     background-color: white;
