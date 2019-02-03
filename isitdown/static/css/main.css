@@ -134,6 +134,13 @@ form {
     background-color: white;
     color: black !important;
 }
+.response_example {
+    padding: 20px;
+    width: 50%;
+    margin: 0 auto;
+    color:#e83e8c;
+    background-color:rgba(255, 255, 0, 0.15);
+}
 
 #host {
     padding: 9px;
