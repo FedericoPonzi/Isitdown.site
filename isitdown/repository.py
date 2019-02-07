@@ -22,15 +22,21 @@ class PingRepository:
         p = p.group_by(Ping.host, Ping.isdown, Ping.response_code).limit(n)
         return p.all()
 
+    @staticmethod
+    def last_ping_to(host, millis):
+        """
+        :param host, millis
+        :return: a list of pings in the last millis to host.
+        """
+        delta = datetime.utcnow() - timedelta(milliseconds=millis)
+        return Ping.query.filter(and_(Ping.host == host, delta < Ping.timestamp)).all()
 
     @staticmethod
     def wasDownOneMinuteAgo(host):
         """
-            Caches/limit requests to down sites to 1 per minute.
-            Returns
-            ------
-            True, if the host was reported as up in the last minute
-            False, otherwise.
+            @Returns
+            The last ping, if the host was pinged as up in the last minute
+                           else A new Ping(isitdown=False) if we don't have informations.
         """
         oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
         last = Ping.query.filter(and_(Ping.host == host, oneMinuteAgo < Ping.timestamp)).all()
@@ -42,4 +48,5 @@ class PingRepository:
     def addPing(p):
         db.session.add(p)
         db.session.commit()
+
 

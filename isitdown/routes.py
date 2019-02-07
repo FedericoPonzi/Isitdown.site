@@ -19,7 +19,7 @@ def apiv2(host=""):
         return jsonify(isitdown=False)
     ping = PingRepository.wasDownOneMinuteAgo(host)
     if ping.isdown:
-        ping = do_ping(host, from_api=1)
+        ping = do_ping(host, from_api=2)
     return jsonify(isitdown=ping.isdown, response_code=ping.response_code)
 
 
@@ -27,9 +27,16 @@ def apiv2(host=""):
 def apiv3(host=""):
     if not is_valid_host(host):
         return jsonify(isitdown=False)
-    ping = PingRepository.wasDownOneMinuteAgo(host)
-    if ping.isdown:
-        ping = do_ping(host, from_api=1)
+    # 1. We return all the pings to this host in the last 30 seconds.
+    # 2. if there is a from_ip in the list, return an error.
+    pings = PingRepository.last_ping_to(host, current_app.config['BACKOFF_API_CALL_TIME'])
+    for p in pings:
+        if p.from_ip == request.access_route[-1]:
+            return jsonify(error="Too many requests to the same site."), 429
+    if len(pings) > 0:
+        return jsonify(isitdown=pings[-1].isdown, response_code=p.response_code, host=host, deprecated=False)
+    # If there isn't any ping in the last 30 seconds:
+    ping = do_ping(host, from_api=3)
     return jsonify(isitdown=ping.isdown, response_code=ping.response_code, host=host, deprecated=False)
 
 
