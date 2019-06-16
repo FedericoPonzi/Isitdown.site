@@ -67,7 +67,7 @@ def page_not_found(error):
 
 
 def is_spam(host, spam=spam_list):
-    return len(list(filter(lambda x: host in x, spam))) > 0
+    return len(list(filter(lambda x: x in host, spam))) > 0
 
 
 def do_ping(host, prefix="https://", from_api=0):
