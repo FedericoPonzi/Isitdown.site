@@ -7,4 +7,4 @@ with open(activate_this) as file_:
 from os import environ, getcwd
 import logging, sys
 from isitdown.index import create_app
-application = create_app(DATABASE_URI="postgresql://user:password@localhost/isitdown")
+application = create_app()
