@@ -14,16 +14,6 @@ frontend_bp = Blueprint('index', __name__, static_folder=os.path.join(basedir, "
 spam_list = [line.rstrip('\n') for line in open(os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv')]
 
 
-@frontend_bp.route("/api/v2/<string:host>")
-def apiv2(host=""):
-    if not is_valid_host(host):
-        return jsonify(isitdown=False)
-    ping = PingRepository.wasDownOneMinuteAgo(host)
-    if ping.isdown:
-        ping = do_ping(host, from_api=2)
-    return jsonify(isitdown=ping.isdown, response_code=ping.response_code)
-
-
 @frontend_bp.route("/api/v3/<string:host>")
 def apiv3(host=""):
     if not is_valid_host(host):
