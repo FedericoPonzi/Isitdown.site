@@ -11,6 +11,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 frontend_bp = Blueprint('index', __name__, static_folder=os.path.join(basedir, "static"), template_folder="templates")
+spam_list = [line.rstrip('\n') for line in open(os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv')]
 
 
 @frontend_bp.route("/api/v2/<string:host>")
@@ -51,10 +52,10 @@ def get_robots():
 
 def is_valid_host(host):
     regex = r"((http:\/\/)|(https:\/\/)){0,1}([a-zA-Z0-9-]+\.)+([a-zA-Z])+"
-    pattern = re.compile(regex)
-    if not pattern.match(host):
-        current_app.logger.error("Regex for site: " + host +" not passed.")
-    return pattern.match(host)
+    res = re.compile(regex).match(host)
+    if not res:
+        current_app.logger.error("Regex for site: {} not passed.".format(host))
+    return res
 
 
 @frontend_bp.route("/")
@@ -75,6 +76,10 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
+def is_spam(host, spam=spam_list):
+    return len(list(filter(lambda x: host in x, spam))) > 0
+
+
 def do_ping(host, prefix="https://", from_api=0):
     '''
     @:returns a Ping(), with the result of the ping. It may or may not have been saved on the database.
@@ -82,7 +87,8 @@ def do_ping(host, prefix="https://", from_api=0):
     if not is_valid_host(host):
         current_app.logger.debug("Error validating host.")
         return Ping(host=host, isdown=True)
-
+    if is_spam(host):
+        return Ping(host=host, isdown=True)
     http_host = prefix + host
     is_down = True
     response_code = -1

@@ -167,7 +167,6 @@ form {
     align-self: center;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-bottom: 2px solid #52BAAF;
     font-size: 1.2em;
     transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
     cursor: pointer;
