@@ -10,11 +10,12 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = str(DATABASE_URI)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
-    BACKOFF_API_CALL_TIME = 30000 # ms
+    BACKOFF_API_CALL_TIME = 30 * 1e3 # ms
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    BACKOFF_API_CALL_TIME = 2000  # ms
+    BACKOFF_API_CALL_TIME = 2 * 1e3 # ms
 
 
 class TestingConfig(Config):

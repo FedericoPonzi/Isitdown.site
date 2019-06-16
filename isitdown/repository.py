@@ -9,7 +9,7 @@ class PingRepository:
     """ Repository class for the Ping table. Used to do queries against the database."""
 
     @staticmethod
-    def getLastPings(n=10, request_source=0):
+    def get_last_pings(n=10, request_source=0):
         '''
         :param n: number of last pings to get
         :param request_source: select the source of the last pings. -1 for every request source
@@ -25,27 +25,28 @@ class PingRepository:
     @staticmethod
     def last_ping_to(host, millis):
         """
-        :param host, millis
-        :return: a list of pings in the last millis to host.
+        :param host: hostname, string
+        :param millis: milliseconds, int
+        :return: a list of pings in the last `millis` to host.
         """
         delta = datetime.utcnow() - timedelta(milliseconds=millis)
         return Ping.query.filter(and_(Ping.host == host, delta < Ping.timestamp)).all()
 
     @staticmethod
-    def wasDownOneMinuteAgo(host):
+    def was_down_one_minute_ago(host):
         """
             @Returns
             The last ping, if the host was pinged as up in the last minute
                            else A new Ping(isitdown=False) if we don't have informations.
         """
-        oneMinuteAgo = datetime.utcnow() - timedelta(minutes=1)
-        last = Ping.query.filter(and_(Ping.host == host, oneMinuteAgo < Ping.timestamp)).all()
+        one_minute_ago = datetime.utcnow() - timedelta(minutes=1)
+        last = Ping.query.filter(and_(Ping.host == host, one_minute_ago < Ping.timestamp)).all()
         if len(last) > 0:
             return last[0]
         return Ping(host=host, isdown=True, response_code="-1") # We have no informations, so assume was down.
 
     @staticmethod
-    def addPing(p):
+    def add_ping(p):
         db.session.add(p)
         db.session.commit()
 

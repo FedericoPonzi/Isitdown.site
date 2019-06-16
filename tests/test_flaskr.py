@@ -29,15 +29,6 @@ def test_working_index(client):
     assert rv.status_code == 200
 
 
-def test_apiv2(client):
-    client, app = client
-    resp = client.get('/api/v2/google.it')
-    json_data = resp.get_json()
-    print(app.config['BACKOFF_API_CALL_TIME'])
-    assert json_data is not None
-    assert json_data['isitdown'] is False
-
-
 def test_apiv3(client):
 
     client, app = client

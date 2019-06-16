@@ -51,10 +51,10 @@ def is_valid_host(host):
 @frontend_bp.route("/")
 @frontend_bp.route("/<string:host>")
 def check(host=""):
-    last_ping_list = PingRepository.getLastPings(request_source=0)
+    last_ping_list = PingRepository.get_last_pings(request_source=0)
     if len(host) == 0:
         return render_template("index.html", last=last_ping_list)
-    ping = PingRepository.wasDownOneMinuteAgo(host)
+    ping = PingRepository.was_down_one_minute_ago(host)
     if ping.isdown:
         ping = do_ping(host)
     return render_template("check.html", last=last_ping_list, pingres=ping)
@@ -106,6 +106,6 @@ def do_ping(host, prefix="https://", from_api=0):
     p = Ping(from_ip=request.access_route[-1], host=Markup(host),timestamp=datetime.utcnow(), isdown=is_down,
              response_code=response_code, from_api=from_api)
 
-    PingRepository.addPing(p)
+    PingRepository.add_ping(p)
 
     return p
