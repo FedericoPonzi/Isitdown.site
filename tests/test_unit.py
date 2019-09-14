@@ -1,5 +1,6 @@
 import unittest
-from isitdown.routes import is_spam
+from isitdown.isitdown import is_spam
+
 
 class TestUtils(unittest.TestCase):
     def test_isSpam(self):

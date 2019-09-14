@@ -1,6 +1,6 @@
 import time
 import pytest
-from flask import current_app, g
+from flask import g
 import isitdown.index as flaskr
 from isitdown.config import TestingConfig
 from datetime import datetime
