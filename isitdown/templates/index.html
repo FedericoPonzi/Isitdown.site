@@ -49,7 +49,7 @@
                                       {% for el in last %}
                                           <li class="list-group-item">
                                             <a href="/{{ el.host }}" title="{{ el.host }}" rel="nofollow">
-                                                <span class="hostList {% if el.isdown %}hostDown{% else %}hostUp{% endif %}">{{ el.host }}</span>
+                                                <span class="hostList {% if el.isdown %}hostDown{% else %} {% if el.response_code >= 400 %} hostUpBadResp {% else %}hostUp {% endif %}{% endif %}">{{ el.host }}</span>
                                             </a><br />
                                             {% with pingtime=el.timestamp.strftime("%Y-%m-%d %I.%M %p") %}
                                             <span class="checktime">{{ pingtime }}

@@ -116,7 +116,9 @@ form {
 .hostUp {
     border-bottom-color: #50ff3b;
 }
-
+.hostUpBadResp {
+    border-bottom-color:#d39e00;
+}
 .hostDown {
     border-bottom-color: #ff5c5c;
 }
