@@ -114,12 +114,15 @@ form {
 }
 
 .hostUp {
+    background-color: #50ff3b24;
     border-bottom-color: #50ff3b;
 }
 .hostUpBadResp {
+    background-color: #d39e0024;
     border-bottom-color:#d39e00;
 }
 .hostDown {
+    background-color: #ff5c5c24;
     border-bottom-color: #ff5c5c;
 }
 
