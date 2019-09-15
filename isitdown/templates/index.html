@@ -70,7 +70,7 @@
                                         <li><strong>Browser problem:</strong> Try clearing your browser cache. You can also try to disable your ad-blocker and refresh the page.</li>
                                         <li><strong>Router's problem:</strong> Restart your router. Turn it off, wait 15 seconds, and turn it on again.</li>
                                         <li><strong>DNS Problem:</strong> It may happen that your ISP blocks that domain.<br>Using an <a href="https://www.opendns.com/setupguide/" title="Opendns">alternative dns</a> may solve the issue.</li>
-                                        <li><strong>Server problem:</strong>If you use IsItDown and see a "Response code" different than 200 (for example 500), it means the site is up but the server has some problems. You cannot do anything about it but wait until some admin solves the situation.</li>
+                                        <li><strong>Server problem:</strong> If you use IsItDown and see a "Response code" different than 200 (for example 500), it means the site is up but the server has some problems. You cannot do anything about it but wait until some admin solves the situation.</li>
                                     </ul>
 
                                 </p>
@@ -79,9 +79,9 @@
                         <div class="card">
                             <div class="card-body">
                             <h2 class="card-title">How it works</h2>
-                                <p class="card-text">It will send an HEAD request on both HTTP (port 80) and HTTPS (port 443) of the requested host. <br>
+                                <p class="card-text">It will send an `<code>HEAD</code>` request on both HTTP (port 80) and HTTPS (port 443) of the requested host. <br>
                                     The site will appear as online if either one of the two ports will send a response and even if it is a bad response (5xx).<br />
-                                    <code>Isitdown.site</code>'s server is located in Germany.
+                                    <code>Isitdown.site</code>'s server is located in Germany. If you are from Germany and some ip is blocked, it might appear as down from IsItDown as well.
                                 </p>
                             </div>
                         </div>
