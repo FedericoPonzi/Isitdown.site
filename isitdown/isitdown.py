@@ -34,6 +34,11 @@ class IsItDown:
 
     def do_ping(self, host, ip, prefix="https://", from_api=0):
         '''
+            Args:
+                host: host to ping
+                ip: author of the request
+                prefix: prefix of the host, either http or https
+                from_api: 0 for web, 1 for apiv1, 2 for apiv2 etc.
             @:returns a Ping(), with the result of the ping. It may or may not have been saved on the database.
         '''
         if not self.is_valid_host(host) or is_spam(host):
@@ -58,7 +63,7 @@ class IsItDown:
 
             # Check both https and http:
             if "Connection refused" in repr(e) and prefix == "https://":
-                return self.do_ping(host, prefix="http://", from_api=from_api)
+                return self.do_ping(host, ip, prefix="http://", from_api=from_api)
             p = Ping(from_ip=ip, host=host, timestamp=datetime.utcnow(), isdown=True,
                      response_code=-1, from_api=from_api)
             PingRepository.add_ping(p)
