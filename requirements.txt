@@ -1,7 +1,9 @@
-pytest
+Werkzeug==0.16.0
+pytest==5.1.3
 psycopg2-binary
 SQLAlchemy>=1.3.0
 requests>=2.20.0
 Flask==1.0.2
 flask_sqlalchemy==2.4.0
-flask_migrate
+Flask-Migrate==2.5.2
+waitress==1.4.1

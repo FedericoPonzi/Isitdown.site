@@ -15,7 +15,7 @@ It's made with:
 [Antonio Di Rosso](https://www.behance.net/nano88) so you should *not* use it in other projects.
 
 ## Development
- * Required `PostreSQL` (or at least `SQLite`) and `Python 3.5` installed.
+ * Required `PostreSQL` (or at least `SQLite`) and `Python >= 3.5` installed.
  * create a user and a database for `isitdown.site`
  * give `build.sh` run permissions: `chmod +x build.sh`
  * run `./build.sh` to create the virtual environment and download the required packages.

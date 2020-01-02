@@ -11,16 +11,16 @@ migrate = Migrate()
 
 
 def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+    new_app = Flask(__name__)  # type: Flask
+    new_app.config.from_object(Config)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
+    db.init_app(new_app)
+    migrate.init_app(new_app, db)
 
     from .routes import frontend_bp
-    app.register_blueprint(frontend_bp)
+    new_app.register_blueprint(frontend_bp)
 
-    return app
+    return new_app
 
 
 if __name__ == "__main__":

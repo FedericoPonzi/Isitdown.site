@@ -4,7 +4,6 @@ import os
 import datetime
 from datetime import datetime
 import requests
-from flask import Markup
 
 
 class TooManyRequestsException(Exception):
@@ -14,17 +13,20 @@ class TooManyRequestsException(Exception):
 spam_list = [line.rstrip('\n') for line in open(os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv')]
 
 
-def is_spam(host, spam=spam_list):
+def is_spam(host, spam=None):
+    if spam is None:
+        spam = spam_list
     return len(list(filter(lambda x: x in host, spam))) > 0
+
+
+def get_last_pings():
+    return PingRepository.get_last_pings(request_source=0)
 
 
 class IsItDown:
     def __init__(self, config, logger):
         self.config = config
         self.logger = logger
-
-    def get_last_pings(self):
-        return PingRepository.get_last_pings(request_source=0)
 
     def check(self, host, ip):
         ping = PingRepository.was_down_one_minute_ago(host)
@@ -33,14 +35,14 @@ class IsItDown:
         return ping
 
     def do_ping(self, host, ip, prefix="https://", from_api=0):
-        '''
+        """
             Args:
                 host: host to ping
                 ip: author of the request
                 prefix: prefix of the host, either http or https
                 from_api: 0 for web, 1 for apiv1, 2 for apiv2 etc.
             @:returns a Ping(), with the result of the ping. It may or may not have been saved on the database.
-        '''
+        """
         if not self.is_valid_host(host) or is_spam(host):
             return Ping(host=host, isdown=True)
         url = prefix + host
@@ -69,7 +71,7 @@ class IsItDown:
             PingRepository.add_ping(p)
             return p
 
-    def apiV3(self, host, ip):
+    def api_v3(self, host, ip):
         # 1. We return all the pings to this host in the last 30 seconds.
         # 2. if there is a from_ip in the list, return an error.
         pings = PingRepository.last_ping_to(host, self.config['BACKOFF_API_CALL_TIME'])

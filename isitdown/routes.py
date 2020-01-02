@@ -2,7 +2,7 @@
 from flask import render_template, request, jsonify, send_from_directory, Blueprint, current_app
 
 import os
-from .isitdown import IsItDown, TooManyRequestsException
+from .isitdown import IsItDown, TooManyRequestsException, get_last_pings
 from werkzeug.local import LocalProxy
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -16,12 +16,12 @@ isitdown = IsItDown(config=config, logger=logger)
 
 
 @frontend_bp.route("/api/v3/<string:host>")
-def apiv3(host=""):
+def api_v3(host=""):
     if not isitdown.is_valid_host(host):
         return jsonify(isitdown=False)
     ip = request.access_route[-1]
     try:
-        res = isitdown.apiV3(host, ip)
+        res = isitdown.api_v3(host, ip)
         return jsonify(isitdown=res.isdown, response_code=res.response_code, host=host, deprecated=False)
     except TooManyRequestsException:
         return jsonify(error="Too many requests to the same URL. Please wait some time."), 429
@@ -39,7 +39,7 @@ def get_robots():
 @frontend_bp.route("/<string:host>")
 def check(host=""):
     ip = request.access_route[-1]
-    last_ping_list = isitdown.get_last_pings()
+    last_ping_list = get_last_pings()
     if len(host) == 0:
         return render_template("index.html", last=last_ping_list)
     ping = isitdown.check(host, ip)
