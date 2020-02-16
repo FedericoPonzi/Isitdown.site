@@ -12,22 +12,25 @@ It's made with:
     them too)
 
 > Please note: The logo is handmade by
-[Antonio Di Rosso](https://www.behance.net/nano88) so you should *not* use it in other projects.
+[Antonio Di Rosso](https://www.behance.net/nano88) so you can *not* use it in other projects.
 
 ## Development
- * Required `PostreSQL` (or at least `SQLite`) and `Python >= 3.5` installed.
- * create a user and a database for `isitdown.site`
- * give `build.sh` run permissions: `chmod +x build.sh`
+Requirements:
+* `PostreSQL` (or at least `SQLite`) 
+* `Python >= 3.5`
+Setup:
+ * Create a user and a database for `isitdown.site`
  * run `./build.sh` to create the virtual environment and download the required packages.
  * use `source .venv/bin/activate` to activate the virtual environment
- * Add the database connection uri as environment variable: `export ISITDOWN_DATABASE_URI=postgresql://username:password@localhost/database`. You can also use `ISITDOWN_PORT` variable to override the default listening port (`5000`).
+ * Add the database connection uri as environment variable: `export ISITDOWN_DATABASE_URI=postgresql://username:password@localhost/database`. 
+   You can also use `ISITDOWN_PORT` variable to override the default listening port (`5000`).
  * use `FLASK_APP=isitdown.dex.py flask run` to run the site.
- * use `python -m pytest` to run tests.
+ * use `python -m pytest` to run the tests suite.
 
 ## Deployment
 I've attached `flask.wsgi.template` used to install it within apache web server.
 
-## Environment
+## Environment variables
  * `ISITDOWN_DATABASE_URI`: The database connection string.
  * `ISITDOWN_PORT`: The port to listen on
  * `FLASK_ENV`: With `development`, it will print useful debug messages.
