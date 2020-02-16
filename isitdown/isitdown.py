@@ -41,7 +41,7 @@ class IsItDown:
         self.config = config
         self.logger = logger
 
-    def do_ping(self, host, ip, prefix="https://", from_api=0):
+    def do_ping(self, host, ip, from_api, prefix="https://"):
         """
             Args:
                 host: host to ping
@@ -65,10 +65,10 @@ class IsItDown:
             PingRepository.add_ping(p)
             return p
         except Exception as e:
-            self.logger.error("Exception while contacting {}. Exception: {} ".format(host, e))
+            self.logger.debug("Exception while contacting {}. Exception: {} ".format(host, e))
             # Check both https and http:
             if "Connection refused" in repr(e) and prefix == "https://":
-                return self.do_ping(host, ip, prefix="http://", from_api=from_api)
+                return self.do_ping(host, ip, from_api=from_api, prefix="http://")
             p = Ping(from_ip=ip, host=host, timestamp=datetime.utcnow(), isdown=True,
                      response_code=-1, from_api=from_api)
             PingRepository.add_ping(p)
