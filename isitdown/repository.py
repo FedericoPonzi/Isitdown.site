@@ -34,19 +34,6 @@ class PingRepository:
         return Ping.query.filter(and_(Ping.host == host, delta < Ping.timestamp)).all()
 
     @staticmethod
-    def was_down_one_minute_ago(host):
-        """
-            :returns
-            The last ping, if the host was pinged as up in the last minute
-                           else A new Ping(isitdown=False) if we don't have any information.
-        """
-        one_minute_ago = datetime.utcnow() - timedelta(minutes=1)
-        last = Ping.query.filter(and_(Ping.host == host, one_minute_ago < Ping.timestamp)).all()
-        if len(last) > 0:
-            return last[0]
-        return Ping(host=host, isdown=True, response_code="-1")  # We have no information, so assume down.
-
-    @staticmethod
     def add_ping(p):
         db.session.add(p)
         db.session.commit()

@@ -17,6 +17,10 @@ class Ping(BaseModel):
     response_code = db.Column(db.Integer)
     from_api = db.Column(db.Integer)  # 0 = from frontend, 1 = from apis TODO: rename to request_source
 
+    @staticmethod
+    def get_invalid_ping(host):
+        return Ping(host=host, isdown=True, response_code=-1)
+
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, isdown=%r, response=%dr)' % (self.id, self.from_ip, self.host,
                                                                                    self.time_stamp, self.isdown,

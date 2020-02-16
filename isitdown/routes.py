@@ -8,24 +8,23 @@ from werkzeug.local import LocalProxy
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 frontend_bp = Blueprint('index', __name__, static_folder=os.path.join(basedir, "static"), template_folder="templates")
-spam_list = [line.rstrip('\n') for line in open(os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv')]
 config = LocalProxy(lambda: current_app.config)
 logger = LocalProxy(lambda: current_app.logger)
 
 isitdown = IsItDown(config=config, logger=logger)
 
 
-@frontend_bp.route("/api/v3/<string:host>")
-def api_v3(host=""):
-    invalid_req = jsonify(isitdown=True , response_code=-1, host=host, deprecated=False)
-    if not isitdown.is_valid_host(host):
-        return invalid_req
-    if host in spam_list:
-        return invalid_req
+@frontend_bp.route("/api/v3/<string:url>")
+def api_v3(url=""):
+    """
+    api v3 impl
+    :param url: In theory, we expect an host, but client's are always clever.
+    :return: a json response object.
+    """
     ip = request.access_route[-1]
     try:
-        res = isitdown.api_v3(host, ip)
-        return jsonify(isitdown=res.isdown, response_code=res.response_code, host=host, deprecated=False)
+        res = isitdown.check_api_v3(url, ip, 3)
+        return jsonify(isitdown=res.isdown, response_code=res.response_code, host=res.host, deprecated=False)
     except TooManyRequestsException:
         return jsonify(error="Too many requests to the same URL. Please wait some time."), 429
 
@@ -45,7 +44,7 @@ def check(host=""):
     last_ping_list = get_last_pings()
     if len(host) == 0:
         return render_template("index.html", last=last_ping_list)
-    ping = isitdown.check(host, ip)
+    ping = isitdown.check_api_v3(host, ip, 0)
     return render_template("check.html", last=last_ping_list, pingres=ping)
 
 

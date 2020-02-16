@@ -30,7 +30,6 @@ def test_working_index(client):
 
 
 def test_apiv3(client):
-
     client, app = client
     resp = client.get('/api/v3/google.it')
     assert resp.status_code == 200
