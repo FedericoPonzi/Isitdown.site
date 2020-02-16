@@ -17,8 +17,11 @@ isitdown = IsItDown(config=config, logger=logger)
 
 @frontend_bp.route("/api/v3/<string:host>")
 def api_v3(host=""):
+    invalid_req = jsonify(isitdown=True , response_code=-1, host=host, deprecated=False)
     if not isitdown.is_valid_host(host):
-        return jsonify(isitdown=False)
+        return invalid_req
+    if host in spam_list:
+        return invalid_req
     ip = request.access_route[-1]
     try:
         res = isitdown.api_v3(host, ip)
