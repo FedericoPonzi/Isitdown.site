@@ -79,11 +79,7 @@ class IsItDown:
         if not self.is_valid_host(host) or is_spam(host) or not self.hostname_exists(host):
             return Ping.get_invalid_ping(host)
         # 1. We return all the pings to this host in the last 30 seconds.
-        # 2. if there is a from_ip in the list, return an error.
         pings = PingRepository.last_ping_to(host, self.config['BACKOFF_API_CALL_TIME'])
-        for p in pings:
-            if p.from_ip == ip:
-                raise TooManyRequestsException()
 
         # there is a recent ping. Let's use that instead of sending a request.
         if len(pings) > 0:

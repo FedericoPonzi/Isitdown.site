@@ -22,11 +22,8 @@ def api_v3(url=""):
     :return: a json response object.
     """
     ip = request.access_route[-1]
-    try:
-        res = isitdown.check_api_v3(url, ip, 3)
-        return jsonify(isitdown=res.isdown, response_code=res.response_code, host=res.host, deprecated=False)
-    except TooManyRequestsException:
-        return jsonify(error="Too many requests to the same URL. Please wait some time."), 429
+    res = isitdown.check_api_v3(url, ip, 3)
+    return jsonify(isitdown=res.isdown, response_code=res.response_code, host=res.host, deprecated=False)
 
 # Some static files:
 @frontend_bp.route("/favicon.ico")
@@ -46,6 +43,7 @@ def check(host=""):
         return render_template("index.html", last=last_ping_list)
     ping = isitdown.check_api_v3(host, ip, 0)
     return render_template("check.html", last=last_ping_list, pingres=ping)
+
 
 
 @frontend_bp.errorhandler(404)
