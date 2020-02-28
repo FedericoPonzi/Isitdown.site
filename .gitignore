@@ -3,8 +3,7 @@ venv
 .venv
 __pycache__
 .idea
-
-
+isitdown/res/spam.csv
 .pytest_cache/
 .coverage
 __pycache__/
