@@ -2,7 +2,7 @@
 from flask import render_template, request, jsonify, send_from_directory, Blueprint, current_app
 
 import os
-from .isitdown import IsItDown, TooManyRequestsException, get_last_pings
+from .isitdown import IsItDown, get_last_pings
 from werkzeug.local import LocalProxy
 
 basedir = os.path.abspath(os.path.dirname(__file__))

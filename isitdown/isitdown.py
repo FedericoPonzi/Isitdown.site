@@ -1,17 +1,23 @@
 from isitdown.repository import Ping, PingRepository
 import re
 import os
+from os import path
 import datetime
 from datetime import datetime
 import requests
 import socket
 from urllib.parse import urlparse
 
-class TooManyRequestsException(Exception):
-    pass
+spam_file_path = os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv'
 
 
-spam_list = [line.rstrip('\n') for line in open(os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv')]
+def load_spam_file():
+    if path.exists(spam_file_path):
+        return [line.rstrip('\n') for line in open(spam_file_path)]
+    return []
+
+
+spam_list = load_spam_file()
 
 
 def is_spam(host, spam=None):
