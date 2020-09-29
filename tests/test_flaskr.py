@@ -24,8 +24,20 @@ def client():
 
 def test_working_index(client):
     client, app = client
-    """Start with a blank database."""
+    # Start with a blank database.
     rv = client.get('/')
+    assert rv.status_code == 200
+
+
+def test_route_not_exists(client):
+    client, app = client
+    rv = client.get("/something/something")
+    assert rv.status_code == 404
+
+
+def test_robots(client):
+    client, app = client
+    rv = client.get("/robots.txt")
     assert rv.status_code == 200
 
 
@@ -59,6 +71,7 @@ def test_backoff(client):
     assert json_data is not None
     assert json_data['isitdown'] is False
 
+
 def millis(start_time):
     """
     :param start_time: datetime.datetime 
@@ -68,4 +81,18 @@ def millis(start_time):
     ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
     return ms
 
-
+def test_is_valid_host():
+    from isitdown.isitdown import IsItDown
+    assert IsItDown.is_valid_host("https://google.it")
+    assert IsItDown.is_valid_host("https://google.com")
+    assert IsItDown.is_valid_host("https://www.google.com")
+    assert IsItDown.is_valid_host("https://hey.google.com")
+    assert IsItDown.is_valid_host("https://hey.google.com/")
+    assert IsItDown.is_valid_host("https://hey.google.com.")
+    assert not IsItDown.is_valid_host("https://hey.google.com/something")
+    assert not IsItDown.is_valid_host("https://hey.google.com./something")
+    assert not IsItDown.is_valid_host("https:/.google.com")
+    assert not IsItDown.is_valid_host("htts://.google.com")
+    assert not IsItDown.is_valid_host("htts://.google.com")
+    assert not IsItDown.is_valid_host("htts://com.google.com")
+    assert not IsItDown.is_valid_host("https://com.google.co3333m")

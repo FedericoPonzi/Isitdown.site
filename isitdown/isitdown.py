@@ -1,26 +1,31 @@
 from isitdown.repository import Ping, PingRepository
 import re
 import os
+import time
+import random
 from os import path
 import datetime
 from datetime import datetime
 import requests
 import socket
 from urllib.parse import urlparse
+from typing import Optional, List
 
-spam_file_path = os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv'
+
+spam_file_path: str = os.path.dirname(os.path.abspath(__file__)) + '/res/spam.csv'
 
 
-def load_spam_file():
+def load_spam_file() -> List[str]:
     if path.exists(spam_file_path):
-        return [line.rstrip('\n') for line in open(spam_file_path)]
+        with open(spam_file_path, "r") as f:
+            return f.read().splitlines()
     return []
 
 
 spam_list = load_spam_file()
 
 
-def is_spam(host, spam=None):
+def is_spam(host: str, spam: Optional[str] =None) -> bool:
     """
     Check if the host is in the spam list.
     :param host:
@@ -36,18 +41,16 @@ def get_last_pings():
     return PingRepository.get_last_pings(request_source=0)
 
 
-def get_host_from_url(host):
-    ret = urlparse(host).netloc
-    if ret == "":
-        return host
-    else: return ret
+def get_host_from_url(host: str) -> str:
+    return urlparse(host).netloc or host
+
 
 class IsItDown:
     def __init__(self, config, logger):
         self.config = config
         self.logger = logger
 
-    def do_ping(self, host, ip, from_api, prefix="https://"):
+    def do_ping(self, host: str, ip: str, from_api: int, prefix: str = "https://") -> Ping:
         """
             Args:
                 host: host to ping
@@ -63,25 +66,24 @@ class IsItDown:
         headers = {
             'User-Agent': 'isitdown.site(Check if a site is down)',
         }
+        resp_code = Ping.RESPONSE_DOWN
         try:
             resp = requests.head(url, timeout=2, stream=True, allow_redirects=True, headers=headers)
             # If we come here, we had a response. So the site is up:
-            p = Ping(from_ip=ip, host=host, timestamp=datetime.utcnow(), isdown=False,
-                     response_code=resp.status_code, from_api=from_api)
-            PingRepository.add_ping(p)
-            return p
-        except Exception as e:
-            self.logger.debug("Exception while contacting {}. Exception: {} ".format(host, e))
-            # Check both https and http:
-            if "Connection refused" in repr(e) and prefix == "https://":
-                return self.do_ping(host, ip, from_api=from_api, prefix="http://")
-            p = Ping(from_ip=ip, host=host, timestamp=datetime.utcnow(), isdown=True,
-                     response_code=-1, from_api=from_api)
+            resp_code = resp.status_code
+        finally:
+            p = Ping(from_ip=ip, host=host, timestamp=datetime.utcnow(), isdown=resp_code == Ping.RESPONSE_DOWN,
+                     response_code=resp_code, from_api=from_api)
             PingRepository.add_ping(p)
             return p
 
     def check_api_v3(self, url, ip, from_api):
         host = get_host_from_url(url)
+        pings_from_host = PingRepository.requests_quantity_from(ip, 60)
+        if pings_from_host > 10:
+            time.sleep(1 + random.randint(1, 5))
+            return Ping.get_invalid_ping(host)
+
         if not self.is_valid_host(host) or is_spam(host) or not self.hostname_exists(host):
             return Ping.get_invalid_ping(host)
         # 1. We return all the pings to this host in the last 30 seconds.
@@ -95,7 +97,7 @@ class IsItDown:
         return self.do_ping(host, ip, from_api)
 
     @staticmethod
-    def hostname_exists(host):
+    def hostname_exists(host: str) -> bool:
         try:
             socket.gethostbyname(host)
         except socket.gaierror:
@@ -103,10 +105,9 @@ class IsItDown:
         else:
             return True
 
-    def is_valid_host(self, host):
-        regex = r"((http:\/\/)|(https:\/\/)){0,1}([a-zA-Z0-9-]+\.)+([a-zA-Z])+"
-        res = re.compile(regex).match(host)
-        is_valid = res is not None
-        if not is_valid:
-            self.logger.error("Regex for site: {} not passed.".format(host))
-        return is_valid
+    @staticmethod
+    def is_valid_host(host) -> bool:
+        host = host.lower()
+        # TODO: this regex is probably too restrictive wrt utf8.
+        regex = r"^(http:\/\/|https:\/\/){0,1}[a-z0-9\.\-]+?\.[a-z]+\.?\/?$"
+        return re.compile(regex).match(host) is not None
