@@ -24,6 +24,11 @@ class PingRepository:
         return p.all()
 
     @staticmethod
+    def requests_quantity_from(ip, seconds):
+        delta = datetime.utcnow() - timedelta(seconds=seconds)
+        return Ping.query.filter(and_(Ping.from_ip == ip, delta < Ping.timestamp)).count()
+
+    @staticmethod
     def last_ping_to(host, millis):
         """
         :param host: hostname, string

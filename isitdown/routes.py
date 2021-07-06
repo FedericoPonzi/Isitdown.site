@@ -1,4 +1,3 @@
-
 from flask import render_template, request, jsonify, send_from_directory, Blueprint, current_app
 
 import os
@@ -25,6 +24,7 @@ def api_v3(url=""):
     res = isitdown.check_api_v3(url, ip, 3)
     return jsonify(isitdown=res.isdown, response_code=res.response_code, host=res.host, deprecated=False)
 
+
 # Some static files:
 @frontend_bp.route("/favicon.ico")
 @frontend_bp.route("/robots.txt")
@@ -45,10 +45,7 @@ def check(host=""):
     return render_template("check.html", last=last_ping_list, pingres=ping)
 
 
-
 @frontend_bp.errorhandler(404)
 def page_not_found(error):
     current_app.logger.error(error)
     return render_template('404.html'), 404
-
-

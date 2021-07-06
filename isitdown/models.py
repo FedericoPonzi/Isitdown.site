@@ -9,6 +9,7 @@ class BaseModel(db.Model):
 
 
 class Ping(BaseModel):
+    RESPONSE_DOWN = -1
     id = db.Column(db.Integer, primary_key=True)
     from_ip = db.Column(db.String(120))
     host = db.Column(db.String(120))
@@ -23,5 +24,5 @@ class Ping(BaseModel):
 
     def __repr__(self):
         return 'Pings(id=%r, from= %r, to= %r, at=%r, isdown=%r, response=%dr)' % (self.id, self.from_ip, self.host,
-                                                                                   self.time_stamp, self.isdown,
+                                                                                   self.timestamp, self.isdown,
                                                                                    self.response_code)
